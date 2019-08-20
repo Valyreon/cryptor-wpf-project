@@ -308,7 +308,7 @@ namespace FileEncryptorWpf.ViewModels
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.FileName))
                 {
-                    this.outputFilePath = dlg.FileName;
+                    this.OutputFilePath = dlg.FileName;
                 }
                 else
                 {
@@ -331,7 +331,7 @@ namespace FileEncryptorWpf.ViewModels
                 try
                 {
                     FileInfo selectedFile = new FileInfo(fileChooseDialog.FileName);
-                    this.inputFilePath = selectedFile.FullName;
+                    this.InputFilePath = selectedFile.FullName;
                 }
                 catch (Exception ex)
                 {
