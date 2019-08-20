@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="FileEncryptorWpf.Views.LoginControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FileEncryptorWpf.Views"
+             xmlns:vm="clr-namespace:FileEncryptorWpf.ViewModels"
+             mc:Ignorable="d"
+             Height="172" Width="490">
+    <Grid Background="LightGray">
+        <TabControl TabStripPlacement="Top" Grid.ColumnSpan="2" Background="WhiteSmoke">
+            <TabItem Header="Login">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="5"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="5"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="5"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"></ColumnDefinition>
+                        <ColumnDefinition Width="5*"></ColumnDefinition>
+                        <ColumnDefinition Width="1.6*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Username:</Label>
+                    <TextBox Padding="3,0" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Margin="5,0" VerticalContentAlignment="Center" Height="28"></TextBox>
+
+                    <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">Password:</Label>
+                    <PasswordBox Padding="3,0" x:Name="passwordBox" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Margin="5,0" VerticalContentAlignment="Center" Height="28"></PasswordBox>
+
+                    <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Private key:</Label>
+                    <TextBox Padding="3,0" Grid.Column="1" Grid.Row="4" Margin="5,0" VerticalContentAlignment="Center" Height="28"
+                             Text="{Binding PrivateKeyFilePath, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <Button Grid.Row="4" Grid.Column="2" Height="28" Margin="5,0" Command="{Binding ChoosePrivateKeyCommand}" Background="#ffffff">Choose</Button>
+
+                    <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button IsDefault="True" Height="28" Margin="5,0" Width="100" Command="{Binding LoginCommand}"
+                                CommandParameter="{Binding ElementName=passwordBox}" Background="#ffffff">Login</Button>
+                        <Button IsDefault="True" Height="28" Margin="5,0" Width="100" Command="{Binding RegisterCommand}"
+                                Background="#ffffff">Register</Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Settings">
+                <Grid Margin="5"  VerticalAlignment="Top">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="5"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="5"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="5"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="71"></ColumnDefinition>
+                        <ColumnDefinition Width="6*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Certificates:</Label>
+                    <TextBox Padding="3,0" Grid.Column="1" Grid.Row="0" Margin="5,0" VerticalContentAlignment="Center" Height="28"
+                                 Text="{Binding CertificationsFolderPath, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <Button Grid.Column="2" Grid.Row="0" Height="28" Margin="5,0" Command="{Binding ChooseCertificateFolderCommand}" Background="#ffffff">Choose</Button>
+
+                    <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">User DB:</Label>
+                    <TextBox Padding="3,0" Grid.Column="1" Grid.Row="2" Margin="5,0" VerticalContentAlignment="Center" Height="28"
+                                 Text="{Binding UserDatabasePath, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <Button Grid.Column="2" Grid.Row="2" Height="28" Margin="5,0" Command="{Binding ChooseUserDatabaseCommand}" Background="#ffffff">Choose</Button>
+
+                    <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Authority:</Label>
+                    <TextBox Padding="3,0" Grid.Column="1" Grid.Row="4" Margin="5,0" VerticalContentAlignment="Center" Height="28"
+                                 Text="{Binding AuthorityCertPath, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <Button Grid.Column="2" Grid.Row="4" Height="28" Margin="5,0" Command="{Binding ChooseAuthorityCommand}" Background="#ffffff">Choose</Button>
+
+                    <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6" Height="28" Margin="5,0" Command="{Binding SaveSettingsCommand}" Width="100" Background="#ffffff" HorizontalAlignment="Center">Save</Button>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

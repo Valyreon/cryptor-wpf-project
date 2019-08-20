@@ -1,0 +1,90 @@
+﻿Projekat je rađen u Visual Studiu 2019, sa tim da bi trebao raditi u VS 2017.
+
+Nakon otvaranja projekta treba promjeniti Startup Projekat na FileEncryptorWpf koji je dio Solution-a.
+Desni klik na FileEncryptorWpf u Solution Explorer-u i klik na opciju "Set as StartUp Project".
+
+Zatim uradite "Rebuild Solution", iz menija Build u Visual Studiu.
+Nakon toga trebalo bi da možete da pokrenete aplikaciju.
+
+======================================================
+
+***AKO BUDE PROBLEMA*** (Preskočite ovu sekciju sve dok ne bude problema)
+
+Ako dođe do nekih problema prilikom kompajliranja ili rada programa. Probajte da idete desni klik na
+Solution i odaberite Restore NuGet packages.
+
+Osim toga, ako bude nekih error poruka vezanih za SQLite Interop dll fajl. Idite desni klik na projekat "FileEncryptorWpf"
+i odaberite "Properties". Zatim u tabu "Build" u dropdown boxu za opciju "Platform target" odaberite neku od opcija koja trenutno
+nije bila izabrana. Ovo je bug u Visual Studiu koji se dešava nekad pri prenosu projekta na druge računare.
+
+Često u prenosu Visual Studiu projekata na druge računare dođe do koruptovanja nuget paketa. Ako se problemi ne budu riješili,
+kontaktiraje developera: budrak.luka@gmail.com
+
+======================================================
+
+***SETTINGS TAB***
+
+Nakon pokretanja aplikacije da bi ona pravilno radila morate podesiti parametre u tabu "Settings" u glavnom prozoru.
+
+Polje "Certificates:" treba da sadrži putanju do foldera u kojem se nalaze certifikati svih korisnika.
+Ako ne želite da pravite svoje CA okruženje, jedno je uključeno uz projekat u folderu OPENSSL u root-u projekta.
+Samo idite na "Choose" dugme i nađite folder projekta i OPENSSL folder u njemu, otvorite ga i selektujte folder "certs".
+
+Polje "User DB:" treba da sadrži putanju do fajla baze korisnika. Idite na dugme "Choose" i odaberite fajl "Users.db"
+koji se nalazi u root-u projekta.
+
+Polje "Authority:" treba da sadrži putanju do CA certifikata koji je potpisao sve korisničke certifikate. Ako nećete
+praviti svoje CA okruženje idite na "Choose" i odaberite cacert.pem koji se nalazi u gore pomenutom OPENSSL folderu.
+
+Kliknite dugme "Save" da biste sačuvali parametre da ih ne bi morali ponovo kucati ako budete ponovo pokretali aplikaciju.
+
+======================================================
+
+***LOGIN***
+
+Da biste se prijavili u sistem treba vam korisničko ime, lozinka i put do privatnog ključa.
+
+Ako nećete praviti nove korisnike, dva su već napravljena za potrebe testiranja aplikacije.
+Da biste napravili još korisnika možete otići na opciju register ali ćete morati generisati tom
+novom korisniku certifikat u CA okruženju.
+
+Postojeći korisnici:
+
+Username: default, Password: default123, Private key: OPENSSL/private/default.key
+Username: luka12, Password: luka1234, Private key: OPENSSL/private/luka.key
+
+=======================================================
+
+***KORIŠTENJE APLIKACIJE***
+
+Ovdje je naveden primjer enkripcije i dekripcije jednog fajla.
+
+Enkripcija:
+1. Ulogujte se kao "default" korisnik.
+2. Odaberite fajl za "Input" polje.
+3. Odaberite fajl za "Output" polje. Recimo da se fajl zove "encrypted.bin".
+4. Odaberite neku kombinaciju algoritama za heširanje i enkripciju u "Hash" i "Crypt" opcijama.
+5. Kao "Mode" odaberite "Encrypt".
+6. Kao "Receiver"-a stavite "luka12". Ovdje se inače stavlja username korisnika kojem se šalje fajl.
+7. Klik na Apply.
+
+Ako je sve prošlo u redu trebali biste da vidite ispis koji završava sa "File encryption complete.".
+Ako nešto ne bude u redu biće vam ispisan odgovarajući error. Sada ide dekripcija. Izađite iz aplikacije 
+i pokrenite je ponovo.
+
+Dekripcija:
+1. Ulogujte se kao "luka12" korisnik.
+2. Odaberite gore dobijen "encrypted.bin" fajl za "Input" polje.
+3. Odaberite fajl za output. Ne morate stavljati ekstenziju, program će sam staviti odgovarajuću ekstenziju.
+4. Za "Mode" odaberite opciju "Decrypt".
+5. Kao "Sender"-a stavite "default".
+6. Klik na Apply.
+
+Ako sve prođe dobro trebali biste u ispisu imati "File decryption complete" na kraju.
+Fajl bi trebao proći i verifikaciju potpisa pa biste negdje u ispisu trebali imati "File verification: SUCCESS".
+Nađite fajl koji ste stavili za output i uporedite sa Input-om u fazi Enkripcije.
+
+
+======================================================
+
+

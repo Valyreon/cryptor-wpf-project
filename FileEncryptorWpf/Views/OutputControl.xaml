@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="FileEncryptorWpf.Views.OutputControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FileEncryptorWpf.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             Height="186" Width="490">
+    <StackPanel Background="WhiteSmoke" Orientation="Vertical">
+        <TextBox Padding="3,0" Margin="5"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 AcceptsTab="True"
+                 IsReadOnly="True"
+                 Height="128"
+                 VerticalScrollBarVisibility="Visible"
+                 Text="{Binding OutputText, UpdateSourceTrigger=PropertyChanged}" 
+                 />
+        <ProgressBar Minimum="0" Maximum="1000" Value="{Binding CurrentOperationProgress}" Height="10" Margin="5,0,5,5"></ProgressBar>
+        <Button Margin="5,0"
+                Height="28"
+                HorizontalAlignment="Right"
+                Width="100"
+                IsDefault="true"
+                Background="#ffffff"
+                Command="{Binding BackCommand}"
+                IsEnabled="{Binding IsBackEnabled, UpdateSourceTrigger=PropertyChanged}">Back</Button>
+    </StackPanel>
+</UserControl>

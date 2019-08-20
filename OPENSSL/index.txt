@@ -1,0 +1,3 @@
+V	200611081011Z		01	unknown	/CN=Main Authority/emailAddress=auth@auth.com
+V	200611081139Z		02	unknown	/CN=default/emailAddress=default@default.com
+V	200611081245Z		03	unknown	/CN=luka/emailAddress=luka@luka.com
