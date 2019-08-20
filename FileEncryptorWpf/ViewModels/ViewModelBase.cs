@@ -79,7 +79,7 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
-        public IEnumerable GetErrors(string propertyName)
+        public IEnumerable GetErrors(string propertyName = null)
         {
             if (!string.IsNullOrEmpty(propertyName))
             {

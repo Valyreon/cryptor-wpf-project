@@ -1,8 +1,10 @@
 ﻿using FileEncryptorWpf.Models;
+using FileEncryptorWpf.ViewModels.CustomValidationAttributes;
 using FileEncryptorWpf.Views;
 using PrivateKeyParsers;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -54,6 +56,9 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
+        [Required(ErrorMessage = "The path to certifications folder is required for proper functioning of the application.")]
+        [IsValidPath(ErrorMessage = "Specified certificates folder path is invalid.")]
+        [DirectoryExists(ErrorMessage = "Specified certificates folder path does not exist.")]
         public string CertificationsFolderPath
         {
             get
@@ -68,6 +73,9 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
+        [Required(ErrorMessage = "The path to main CA is required for proper functioning of the application.")]
+        [IsValidPath(ErrorMessage = "Specified CA file path is invalid.")]
+        [FileExists(ErrorMessage = "Specified CA file does not exist.")]
         public string AuthorityCertPath
         {
             get
@@ -82,6 +90,9 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
+        [Required(ErrorMessage = "The path to User Database is required for proper functioning of the application.")]
+        [IsValidPath(ErrorMessage = "Specified User Database file path is invalid.")]
+        [FileExists(ErrorMessage = "Specified User Database file does not exist.")]
         public string UserDatabasePath
         {
             get
@@ -96,6 +107,9 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
+        [Required(ErrorMessage = "Private key is required for login.")]
+        [IsValidPath(ErrorMessage = "Specified private key file path is invalid.")]
+        [FileExists(ErrorMessage = "Specified private key file does not exist.")]
         public string PrivateKeyFilePath
         {
             get
@@ -110,6 +124,8 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
+        [Required(ErrorMessage = "Username is required for login.")]
+        [StringLength(25, MinimumLength = 7, ErrorMessage = "Username must be between 7 and 25 characters long.")]
         public string Username
         {
             get
@@ -236,6 +252,9 @@ namespace FileEncryptorWpf.ViewModels
         {
             try
             {
+                this.Validate();
+                var x = this.HasErrors;
+                var errorList = this.GetErrors();
                 LoginManager loginManager = new LoginManager(certificationsFolderPath, privateKeyPath, userDatabasePath, authorityCertPath);
                 var userInfo = loginManager.Login(this.username, (passBox as PasswordBox).Password, out var data);
 

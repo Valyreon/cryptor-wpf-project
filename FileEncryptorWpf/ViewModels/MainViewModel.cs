@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
@@ -13,6 +14,7 @@ using AlgorithmLibrary;
 using CryptedStreamParsers;
 using FileEncryptorWpf.Models;
 using FileEncryptorWpf.Models.ComboBoxObjects;
+using FileEncryptorWpf.ViewModels.CustomValidationAttributes;
 using FileEncryptorWpf.Views;
 
 namespace FileEncryptorWpf.ViewModels
@@ -183,6 +185,9 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
+        [Required]
+        [IsValidPath]
+        [FileExists]
         public string InputFilePath
         {
             get
@@ -197,6 +202,8 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
+        [Required]
+        [IsValidPath]
         public string OutputFilePath
         {
             get

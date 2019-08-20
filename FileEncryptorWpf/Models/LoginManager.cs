@@ -29,22 +29,6 @@ namespace FileEncryptorWpf.Models
 
         public UserInformation Login(string username, string password, out DataComponents data)
         {
-            if (string.IsNullOrWhiteSpace(username) ||
-               string.IsNullOrWhiteSpace(password) ||
-               string.IsNullOrWhiteSpace(privateKeyPath))
-            {
-                throw new Exception("Username, password and private key fields can't be empty.");
-            }
-
-            if(string.IsNullOrWhiteSpace(certificationsFolderPath))
-            {
-                throw new Exception("Please specify certifications folder in Settings tab.");
-            }
-            else if (string.IsNullOrWhiteSpace(userDatabasePath))
-            {
-                throw new Exception("Please specify user database file in Settings tab.");
-            }
-
             DataComponents dataComp = new DataComponents(userDatabasePath, certificationsFolderPath, authorityCertPath);
 
             var user = dataComp.UserDatabase.GetUser(username);
@@ -61,16 +45,6 @@ namespace FileEncryptorWpf.Models
                 if (dataComp.CertificateManager.VerifyCertificate(userCert) == false)
                 {
                     throw new Exception("Certificate is either not signed by the required CA or is invalid.");
-                }
-
-                if (userCert == null)
-                {
-                    throw new Exception("No user certificate found.");
-                }
-
-                if (File.Exists(privateKeyPath) == false)
-                {
-                    throw new FileNotFoundException("Private key file does not exist.");
                 }
 
                 byte[] keyRaw = File.ReadAllBytes(privateKeyPath);

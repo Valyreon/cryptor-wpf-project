@@ -86,6 +86,9 @@
     <Compile Include="Models\Processor.cs" />
     <Compile Include="Models\ProgressReporter.cs" />
     <Compile Include="Models\RegisterManager.cs" />
+    <Compile Include="ViewModels\CustomValidationAttributes\DirectoryExists.cs" />
+    <Compile Include="ViewModels\CustomValidationAttributes\FileExists.cs" />
+    <Compile Include="ViewModels\CustomValidationAttributes\IsValidPath.cs" />
     <Compile Include="ViewModels\DelegateCommandWithParameter.cs" />
     <Compile Include="ViewModels\GeneralViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
