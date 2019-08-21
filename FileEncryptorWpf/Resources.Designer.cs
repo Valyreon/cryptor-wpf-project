@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FileEncryptorWpf.Properties {
+namespace FileEncryptorWpf {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace FileEncryptorWpf.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FileEncryptorWpf.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FileEncryptorWpf.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,12 +61,12 @@ namespace FileEncryptorWpf.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] password_font {
+        internal static System.Drawing.Bitmap error_image {
             get {
-                object obj = ResourceManager.GetObject("password_font", resourceCulture);
-                return ((byte[])(obj));
+                object obj = ResourceManager.GetObject("error_image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="Views/GeneralWindow.xaml">
     <Application.Resources>
-        <!-- Style the error validation by showing the text message under the field -->
         <Style TargetType="TextBox">
             <Setter Property="Validation.ErrorTemplate">
                 <Setter.Value>
@@ -13,8 +12,7 @@
                                 <Grid HorizontalAlignment="Stretch">
                                     <AdornedElementPlaceholder x:Name="errorControl"/>
                                 </Grid>
-                                <Image Width="16" Height="16" Margin="-26,0,0,0"  ToolTip="{Binding [0].ErrorContent}" Source="C:\Users\luka.budrak\Desktop\cryptor-wpf-project\delete-icon.png"></Image>
-                                
+                                <Image Width="16" Height="16" Margin="-26,0,0,0"  ToolTip="{Binding [0].ErrorContent}" Source="Resources/error-image.png"></Image>
                             </DockPanel>
                         </Grid>
                     </ControlTemplate>

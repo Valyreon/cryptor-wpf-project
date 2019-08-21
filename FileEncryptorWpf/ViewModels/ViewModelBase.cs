@@ -14,7 +14,6 @@ namespace FileEncryptorWpf.ViewModels
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
         private object _lock = new object();
         public bool HasErrors { get { return _errors.Any(propErrors => propErrors.Value != null && propErrors.Value.Count > 0); } }
-        public bool IsValid { get { return this.HasErrors; } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -90,6 +89,11 @@ namespace FileEncryptorWpf.ViewModels
             }
             else
                 return _errors.SelectMany(err => err.Value.ToList());
+        }
+
+        public void ClearErrors()
+        {
+            _errors.Clear();
         }
     }
 }

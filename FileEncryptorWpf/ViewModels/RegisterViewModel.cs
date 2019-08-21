@@ -1,6 +1,8 @@
 ﻿using FileEncryptorWpf.Models;
+using FileEncryptorWpf.ViewModels.CustomValidationAttributes;
 using FileEncryptorWpf.Views;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -8,7 +10,7 @@ using UserDatabaseManager;
 
 namespace FileEncryptorWpf.ViewModels
 {
-    public class RegisterViewModel: ViewModelBase
+    public class RegisterViewModel : ViewModelBase
     {
         private readonly IView thisWindow;
         private readonly object backControl;
@@ -26,6 +28,8 @@ namespace FileEncryptorWpf.ViewModels
 
         public bool IsNotExternal { get => !isExternal; }
 
+        [Required]
+        [StringLength(25, MinimumLength = 7, ErrorMessage = "Username must be between 7 and 25 characters long.")]
         public string Username
         {
             get
@@ -40,6 +44,8 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
+        [Required]
+        [FileExists]
         public string CertificateFilePath
         {
             get
@@ -75,16 +81,17 @@ namespace FileEncryptorWpf.ViewModels
 
         private void ChooseCertificate(object obj)
         {
-            OpenFileDialog dlg = new OpenFileDialog
+            using (OpenFileDialog dlg = new OpenFileDialog
             {
                 Filter = "Key file | *.*"
-            };
-
-            var result = dlg.ShowDialog();
-
-            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.FileName))
+            })
             {
-                CertificateFilePath = dlg.FileName;
+                var result = dlg.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.FileName))
+                {
+                    CertificateFilePath = dlg.FileName;
+                }
             }
         }
 
@@ -99,11 +106,15 @@ namespace FileEncryptorWpf.ViewModels
         {
             try
             {
-                RegisterManager registerManager = new RegisterManager(data);
-                registerManager.Register(username, certificateFilePath , (passwordBox as PasswordBox).Password, isExternal);
-                this.Cancel();
+                this.Validate();
+                if (!this.HasErrors)
+                {
+                    RegisterManager registerManager = new RegisterManager(data);
+                    registerManager.Register(username, certificateFilePath, (passwordBox as PasswordBox).Password, isExternal);
+                    this.thisWindow.ChangeCurrentControlTo(backControl);
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
             }

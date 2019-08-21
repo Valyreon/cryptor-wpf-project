@@ -125,7 +125,7 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required(ErrorMessage = "Username is required for login.")]
-        [StringLength(25, MinimumLength = 7, ErrorMessage = "Username must be between 7 and 25 characters long.")]
+        //[StringLength(25, MinimumLength = 7, ErrorMessage = "Username must be between 7 and 25 characters long.")]
         public string Username
         {
             get
@@ -229,8 +229,17 @@ namespace FileEncryptorWpf.ViewModels
 
         private void SaveSettings()
         {
+            ClearErrors();
+            ValidateProperty(this.CertificationsFolderPath, "CertificationsFolderPath");
+            ValidateProperty(this.UserDatabasePath, "UserDatabasePath");
+            ValidateProperty(this.AuthorityCertPath, "AuthorityCertPath");
+
+            if (this.HasErrors)
+                return;
+
             try
             {
+                
                 using (FileStream propertyFile = new FileStream("settings.cfg", FileMode.Create))
                 {
                     PropertiesStreams.Properties props = new PropertiesStreams.Properties();
