@@ -203,6 +203,7 @@ namespace FileEncryptorWpf.ViewModels
 
         [Required]
         [FileExists(invert: true, ErrorMessage = "This file already exists. Select another file.")]
+        [DirectoryExists(invert: true, ErrorMessage = "This path is a directory. Select a file.")]
         public string OutputFilePath
         {
             get
@@ -319,7 +320,8 @@ namespace FileEncryptorWpf.ViewModels
             using (SaveFileDialog dlg = new SaveFileDialog
             {
                 FileName = string.Empty,
-                AddExtension = true
+                AddExtension = true,
+                InitialDirectory = string.IsNullOrWhiteSpace(InputFilePath) ? "" : Path.GetDirectoryName(InputFilePath)
             })
             {
                 var result = dlg.ShowDialog();
@@ -330,7 +332,7 @@ namespace FileEncryptorWpf.ViewModels
                 }
                 else
                 {
-                    throw new Exception("Chosen output file path is invalid.");
+                    this.ValidateProperty(OutputFilePath, "OutputFilePath");
                 }
             }
         }
@@ -352,12 +354,12 @@ namespace FileEncryptorWpf.ViewModels
                     this.InputFilePath = selectedFile.FullName;
                     if (string.IsNullOrWhiteSpace(this.OutputFilePath))
                     {
-                        this.OutputFilePath = Path.GetDirectoryName(this.InputFilePath) + "\";
+                        this.OutputFilePath = Path.GetDirectoryName(this.InputFilePath) + @"\";
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    System.Windows.Forms.MessageBox.Show(ex.Message, "Error");
+                    this.ValidateProperty(InputFilePath, "InputFilePath");
                 }
             }
         }
