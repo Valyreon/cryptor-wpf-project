@@ -48,12 +48,6 @@ namespace FileEncryptorWpf.ViewModels
         /// <param name="thisWindow">Window in which MainControl is shown.</param>
         public MainViewModel(UserInformation currentUser, DataComponents data, IView thisWindow)
         {
-            /*this.Model = new Processor()
-            {
-                DataSource = data,
-                CurrentUserInfo = currentUser
-            };*/
-
             this.dataSource = data;
             this.currentUserInfo = currentUser;
 
