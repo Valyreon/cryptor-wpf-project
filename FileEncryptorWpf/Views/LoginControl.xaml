@@ -80,5 +80,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <StackPanel>
+            
+        </StackPanel>
     </Grid>
 </UserControl>

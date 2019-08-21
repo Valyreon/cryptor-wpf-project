@@ -57,7 +57,7 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required(ErrorMessage = "The path to certifications folder is required for proper functioning of the application.")]
-        [IsValidPath(ErrorMessage = "Specified certificates folder path is invalid.")]
+        //[IsValidPath(ErrorMessage = "Specified certificates folder path is invalid.")]
         [DirectoryExists(ErrorMessage = "Specified certificates folder path does not exist.")]
         public string CertificationsFolderPath
         {
@@ -74,7 +74,7 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required(ErrorMessage = "The path to main CA is required for proper functioning of the application.")]
-        [IsValidPath(ErrorMessage = "Specified CA file path is invalid.")]
+        //[IsValidPath(ErrorMessage = "Specified CA file path is invalid.")]
         [FileExists(ErrorMessage = "Specified CA file does not exist.")]
         public string AuthorityCertPath
         {
@@ -91,7 +91,7 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required(ErrorMessage = "The path to User Database is required for proper functioning of the application.")]
-        [IsValidPath(ErrorMessage = "Specified User Database file path is invalid.")]
+        //[IsValidPath(ErrorMessage = "Specified User Database file path is invalid.")]
         [FileExists(ErrorMessage = "Specified User Database file does not exist.")]
         public string UserDatabasePath
         {
@@ -108,7 +108,7 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required(ErrorMessage = "Private key is required for login.")]
-        [IsValidPath(ErrorMessage = "Specified private key file path is invalid.")]
+        //[IsValidPath(ErrorMessage = "Specified private key file path is invalid.")]
         [FileExists(ErrorMessage = "Specified private key file does not exist.")]
         public string PrivateKeyFilePath
         {
@@ -253,12 +253,18 @@ namespace FileEncryptorWpf.ViewModels
             try
             {
                 this.Validate();
-                var x = this.HasErrors;
-                var errorList = this.GetErrors();
-                LoginManager loginManager = new LoginManager(certificationsFolderPath, privateKeyPath, userDatabasePath, authorityCertPath);
-                var userInfo = loginManager.Login(this.username, (passBox as PasswordBox).Password, out var data);
+                if(!this.HasErrors)
+                {
+                    LoginManager loginManager = new LoginManager(certificationsFolderPath, privateKeyPath, userDatabasePath, authorityCertPath);
+                    var userInfo = loginManager.Login(this.username, (passBox as PasswordBox).Password, out var data);
 
-                this.thisWindow.ChangeCurrentControlTo(new MainViewModel(userInfo, data, this.thisWindow));
+                    this.thisWindow.ChangeCurrentControlTo(new MainViewModel(userInfo, data, this.thisWindow));
+                }
+                else
+                {
+
+                }
+                
             }
             catch (InvalidKeyFileException)
             {
