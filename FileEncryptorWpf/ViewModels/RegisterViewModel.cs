@@ -15,6 +15,7 @@ namespace FileEncryptorWpf.ViewModels
         private readonly IView thisWindow;
         private readonly object backControl;
         private string username;
+        private string password;
         private string certificateFilePath;
         private bool isExternal;
         private readonly DataComponents data;
@@ -45,7 +46,23 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required]
-        [FileExists]
+        [SecurePassword]
+        public string Password
+        {
+            get
+            {
+                return this.password;
+            }
+
+            set
+            {
+                this.password = value;
+                this.RaisePropertyChangedEvent("Password");
+            }
+        }
+
+        [Required]
+        [FileExists(ErrorMessage = "Specified public certificate does not exist.")]
         public string CertificateFilePath
         {
             get
@@ -75,7 +92,7 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
-        public ICommand RegisterCommand { get => new DelegateCommandWithParameter(this.TryToRegister); }
+        public ICommand RegisterCommand { get => new DelegateCommand(this.TryToRegister); }
 
         public ICommand ChooseCertificateCommand { get => new DelegateCommandWithParameter(this.ChooseCertificate); }
 
@@ -102,15 +119,23 @@ namespace FileEncryptorWpf.ViewModels
             this.thisWindow.ChangeCurrentControlTo(backControl);
         }
 
-        private void TryToRegister(object passwordBox)
+        private void TryToRegister()
         {
             try
             {
-                this.Validate();
+                this.ClearErrors();
+                if(this.IsNotExternal)
+                {
+                    this.ValidateProperty(Password, "Password");
+                }
+                OnErrorsChanged("Password");
+                this.ValidateProperty(Username, "Username");
+                this.ValidateProperty(CertificateFilePath, "CertificateFilePath");
+
                 if (!this.HasErrors)
                 {
                     RegisterManager registerManager = new RegisterManager(data);
-                    registerManager.Register(username, certificateFilePath, (passwordBox as PasswordBox).Password, isExternal);
+                    registerManager.Register(username, certificateFilePath, Password, isExternal);
                     this.thisWindow.ChangeCurrentControlTo(backControl);
                 }
             }

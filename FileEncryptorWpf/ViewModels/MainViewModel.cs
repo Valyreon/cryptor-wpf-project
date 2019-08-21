@@ -186,7 +186,6 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required]
-        [IsValidPath]
         [FileExists]
         public string InputFilePath
         {
@@ -203,7 +202,6 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required]
-        [IsValidPath]
         public string OutputFilePath
         {
             get

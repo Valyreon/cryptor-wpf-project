@@ -25,10 +25,10 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Username:</Label>
-        <TextBox Padding="3,0" FontFamily="Resources/password-font.ttf" Text="{Binding Username, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Margin="5,0" VerticalContentAlignment="Center" Height="28"></TextBox>
+        <TextBox Padding="3,0" Text="{Binding Username, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Margin="5,0" VerticalContentAlignment="Center" Height="28"></TextBox>
 
         <Label IsEnabled="{Binding IsNotExternal, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">Password:</Label>
-        <PasswordBox IsEnabled="{Binding IsNotExternal, UpdateSourceTrigger=PropertyChanged}" Padding="3,0" x:Name="passwordBox" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Margin="5,0" VerticalContentAlignment="Center" Height="28"></PasswordBox>
+        <TextBox Text="{Binding Password, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsNotExternal, UpdateSourceTrigger=PropertyChanged}" Padding="3,0" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Margin="5,0" VerticalContentAlignment="Center" Height="28"></TextBox>
 
         <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Certificate:</Label>
         <TextBox Padding="3,0" Grid.Column="1" Grid.Row="4" Margin="5,0" VerticalContentAlignment="Center" Height="28"

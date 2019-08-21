@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileEncryptorWpf.Properties;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,7 +13,7 @@ namespace FileEncryptorWpf.ViewModels
     {
         private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-        private object _lock = new object();
+        private readonly object _lock = new object();
         public bool HasErrors { get { return _errors.Any(propErrors => propErrors.Value != null && propErrors.Value.Count > 0); } }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -64,12 +65,10 @@ namespace FileEncryptorWpf.ViewModels
 
         private void HandleValidationResults(List<ValidationResult> validationResults)
         {
-            //Group validation results by property names  
             var resultsByPropNames = from res in validationResults
                                      from mname in res.MemberNames
                                      group res by mname into g
                                      select g;
-            //add _errors to dictionary and inform binding engine about _errors  
             foreach (var prop in resultsByPropNames)
             {
                 var messages = prop.Select(r => r.ErrorMessage).ToList();
