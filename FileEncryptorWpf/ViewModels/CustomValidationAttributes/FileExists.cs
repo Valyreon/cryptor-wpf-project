@@ -10,8 +10,15 @@ namespace FileEncryptorWpf.ViewModels.CustomValidationAttributes
 {
     public class FileExists : ValidationAttribute
     {
+        bool invert = false;
+
         public FileExists()
         {
+        }
+
+        public FileExists(bool invert)
+        {
+            this.invert = invert;
         }
 
         public override bool IsValid(object value)
@@ -21,7 +28,11 @@ namespace FileEncryptorWpf.ViewModels.CustomValidationAttributes
             if (value is null)
                 return true;
 
-            return File.Exists(strValue);
+            var res = File.Exists(strValue);
+
+            if (invert)
+                return !res;
+            return res;
         }
     }
 }

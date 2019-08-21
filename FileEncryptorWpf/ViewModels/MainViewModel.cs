@@ -186,7 +186,7 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required]
-        [FileExists]
+        [FileExists(ErrorMessage = "Specified input file does not exist.")]
         public string InputFilePath
         {
             get
@@ -202,6 +202,7 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required]
+        [FileExists(invert: true, ErrorMessage = "This file already exists. Select another file.")]
         public string OutputFilePath
         {
             get
@@ -216,6 +217,7 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
+        [Required]
         public string OtherPartyUsername
         {
             get
@@ -238,6 +240,17 @@ namespace FileEncryptorWpf.ViewModels
 
         private void ApplyOperation()
         {
+            this.Validate();
+            if (this.HasErrors)
+                return;
+
+            bool userExists = !(this.dataSource.UserDatabase.GetUser(OtherPartyUsername) is null);
+            if (!userExists)
+            {
+                System.Windows.Forms.MessageBox.Show("That user does not exist in the database.", "Error");
+                return;
+            }
+
             OutputViewModel outputViewModel = new OutputViewModel(this.thisWindow, this);
             this.thisWindow.ChangeCurrentControlTo(outputViewModel);
 
@@ -337,6 +350,10 @@ namespace FileEncryptorWpf.ViewModels
                 {
                     FileInfo selectedFile = new FileInfo(fileChooseDialog.FileName);
                     this.InputFilePath = selectedFile.FullName;
+                    if (string.IsNullOrWhiteSpace(this.OutputFilePath))
+                    {
+                        this.OutputFilePath = Path.GetDirectoryName(this.InputFilePath) + "\";
+                    }
                 }
                 catch (Exception ex)
                 {
