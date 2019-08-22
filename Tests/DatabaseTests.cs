@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 using System.IO;
 using UserDatabaseManager;
 
@@ -21,9 +22,10 @@ namespace Tests
         [TestMethod]
         public void TestPassword()
         {
-            UserDatabase db = new UserDatabase(@"C:\Users\luka.budrak\Desktop\cryptor-wpf-project\Users.db");
+            UserDatabase db = new UserDatabase(@"F:\Documents\Visual Studio 2019\Projects\cryptor-wpf-project\Users.db");
+            var st = Stopwatch.StartNew();
             User def = db.GetUser("default");
-            Assert.IsTrue(def.IsPasswordValid("default"));
+            st.Stop();
         }
     }
 }
