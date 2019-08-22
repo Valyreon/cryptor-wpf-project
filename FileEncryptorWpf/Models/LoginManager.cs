@@ -14,22 +14,20 @@ namespace FileEncryptorWpf.Models
         private readonly string certificationsFolderPath;
         private readonly string privateKeyPath;
         private readonly string userDatabasePath;
-        private readonly string authorityCertPath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginManager"/> class.
         /// </summary>
-        public LoginManager(string certs, string privKey, string userDb, string caPath)
+        public LoginManager(string certs, string privKey, string userDb)
         {
             certificationsFolderPath = certs;
             privateKeyPath = privKey;
             userDatabasePath = userDb;
-            authorityCertPath = caPath;
         }
 
         public UserInformation Login(string username, string password, out DataComponents data)
         {
-            DataComponents dataComp = new DataComponents(userDatabasePath, certificationsFolderPath, authorityCertPath);
+            DataComponents dataComp = new DataComponents(userDatabasePath, certificationsFolderPath);
 
             var user = dataComp.UserDatabase.GetUser(username);
 
@@ -44,7 +42,7 @@ namespace FileEncryptorWpf.Models
 
                 if (dataComp.CertificateManager.VerifyCertificate(userCert) == false)
                 {
-                    throw new Exception("Certificate is either not signed by the required CA or is invalid.");
+                    throw new Exception("Certificate is invalid.");
                 }
 
                 byte[] keyRaw = File.ReadAllBytes(privateKeyPath);

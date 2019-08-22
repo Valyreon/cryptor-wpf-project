@@ -38,14 +38,13 @@ namespace FileEncryptorWpf.Models
                 {
                     reporter?.Log("Certificate was not found. Aborting.");
                 }
-
                 else
                 {
                     reporter?.Log("Certificate located. Verifying certificate...");
 
-                    if (this.dataSource.CertificateManager.VerifyCertificate(cert) == false)
+                    if (this.dataSource.CertificateManager.VerifyCertificate(cert) is false)
                     {
-                        reporter?.Log("Receiver's certificate is not signed by required CA or is invalid. Aborting.");
+                        reporter?.Log("Receiver's certificate is invalid. Aborting.");
                     }
                     else
                     {

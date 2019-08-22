@@ -21,6 +21,8 @@ namespace UserDatabaseManager
 
         public bool IsExternal { get; set; }
 
+        public byte[] PublicCertificate { get; set; }
+
         public bool IsPasswordValid(string password)
         {
             var hasher = SHA1.Create();

@@ -36,7 +36,6 @@ namespace FileEncryptorWpf.Models
                 var cert = this.dataSource.CertificateManager.GetCertificate(senderUser.CertificateThumbprint);
 
 
-
                 if (cert == null)
                 {
                     reporter?.Log("Certificate was not located. Unable to verify integrity.");
@@ -46,7 +45,7 @@ namespace FileEncryptorWpf.Models
                     reporter?.Log("Certificate located.");
                     if (this.dataSource.CertificateManager.VerifyCertificate(cert) == false)
                     {
-                        reporter?.Log("Sender's certificate is invalid. Continuing.");
+                        reporter?.Log("Sender's certificate is INVALID. Continuing.");
                     }
 
                     reporter?.Log("Verifying file integrity...");

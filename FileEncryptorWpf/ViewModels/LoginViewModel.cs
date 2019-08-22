@@ -27,8 +27,6 @@ namespace FileEncryptorWpf.ViewModels
 
         private string username;
 
-        private string authorityCertPath;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginViewModel"/>.
         /// </summary>
@@ -48,7 +46,6 @@ namespace FileEncryptorWpf.ViewModels
                     props.Load(propertyFile);
                     this.CertificationsFolderPath = props.GetProperty("certs", string.Empty);
                     this.UserDatabasePath = props.GetProperty("userdb", string.Empty);
-                    this.AuthorityCertPath = props.GetProperty("auth_path", string.Empty);
                 }
             }
             catch (Exception)
@@ -57,7 +54,6 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required(ErrorMessage = "The path to certifications folder is required for proper functioning of the application.")]
-        //[IsValidPath(ErrorMessage = "Specified certificates folder path is invalid.")]
         [DirectoryExists(ErrorMessage = "Specified certificates folder path does not exist.")]
         public string CertificationsFolderPath
         {
@@ -73,25 +69,7 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
-        [Required(ErrorMessage = "The path to main CA is required for proper functioning of the application.")]
-        //[IsValidPath(ErrorMessage = "Specified CA file path is invalid.")]
-        [FileExists(ErrorMessage = "Specified CA file does not exist.")]
-        public string AuthorityCertPath
-        {
-            get
-            {
-                return this.authorityCertPath;
-            }
-
-            set
-            {
-                this.authorityCertPath = value;
-                this.RaisePropertyChangedEvent("AuthorityCertPath");
-            }
-        }
-
         [Required(ErrorMessage = "The path to User Database is required for proper functioning of the application.")]
-        //[IsValidPath(ErrorMessage = "Specified User Database file path is invalid.")]
         [FileExists(ErrorMessage = "Specified User Database file does not exist.")]
         public string UserDatabasePath
         {
@@ -108,7 +86,6 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required(ErrorMessage = "Private key is required for login.")]
-        //[IsValidPath(ErrorMessage = "Specified private key file path is invalid.")]
         [FileExists(ErrorMessage = "Specified private key file does not exist.")]
         public string PrivateKeyFilePath
         {
@@ -125,7 +102,6 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required(ErrorMessage = "Username is required for login.")]
-        //[StringLength(25, MinimumLength = 7, ErrorMessage = "Username must be between 7 and 25 characters long.")]
         public string Username
         {
             get
@@ -148,31 +124,11 @@ namespace FileEncryptorWpf.ViewModels
 
         public ICommand ChooseUserDatabaseCommand { get => new DelegateCommand(this.ChooseUserDatabase); }
 
-        public ICommand ChooseAuthorityCommand { get => new DelegateCommand(this.ChooseAuthority); }
-
         public ICommand LoginCommand { get => new DelegateCommandWithParameter(this.TryToLogin); }
 
         public ICommand SaveSettingsCommand { get => new DelegateCommand(this.SaveSettings); }
 
         public ICommand RegisterCommand { get => new DelegateCommand(this.GoToRegister); }
-
-        private void ChooseAuthority()
-        {
-            using (OpenFileDialog dlg = new OpenFileDialog
-            {
-                Filter = "PEM files (*.pem)|*.pem|DER files (*.der)|*.der|CRT files (*.crt)|*.crt|All files (*.*)|*.*",
-                CheckFileExists = true,
-                CheckPathExists = true,
-            })
-            {
-                var result = dlg.ShowDialog();
-
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.FileName))
-                {
-                    this.AuthorityCertPath = dlg.FileName;
-                }
-            }
-        }
 
         private void ChooseCertificateFolder()
         {
@@ -232,7 +188,6 @@ namespace FileEncryptorWpf.ViewModels
             ClearErrors();
             ValidateProperty(this.CertificationsFolderPath, "CertificationsFolderPath");
             ValidateProperty(this.UserDatabasePath, "UserDatabasePath");
-            ValidateProperty(this.AuthorityCertPath, "AuthorityCertPath");
 
             if (this.HasErrors)
                 return;
@@ -245,7 +200,6 @@ namespace FileEncryptorWpf.ViewModels
                     PropertiesStreams.Properties props = new PropertiesStreams.Properties();
                     props.AddProperty("certs", this.CertificationsFolderPath);
                     props.AddProperty("userdb", this.UserDatabasePath);
-                    props.AddProperty("auth_path", this.AuthorityCertPath);
                     props.Store(propertyFile);
 
                     MessageBox.Show("Settings successfully written.", "Save Success");
@@ -264,7 +218,7 @@ namespace FileEncryptorWpf.ViewModels
                 this.Validate();
                 if(!this.HasErrors)
                 {
-                    LoginManager loginManager = new LoginManager(certificationsFolderPath, privateKeyPath, userDatabasePath, authorityCertPath);
+                    LoginManager loginManager = new LoginManager(certificationsFolderPath, privateKeyPath, userDatabasePath);
                     var userInfo = loginManager.Login(this.username, (passBox as PasswordBox).Password, out var data);
 
                     this.thisWindow.ChangeCurrentControlTo(new MainViewModel(userInfo, data, this.thisWindow));
@@ -287,7 +241,7 @@ namespace FileEncryptorWpf.ViewModels
 
         private void GoToRegister()
         {
-            DataComponents data = new DataComponents(UserDatabasePath, CertificationsFolderPath, AuthorityCertPath);
+            DataComponents data = new DataComponents(UserDatabasePath, CertificationsFolderPath);
             this.thisWindow.ChangeCurrentControlTo(new RegisterViewModel(this.thisWindow, this, data));
         }
     }

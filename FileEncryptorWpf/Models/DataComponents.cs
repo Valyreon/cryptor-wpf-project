@@ -16,10 +16,10 @@ namespace FileEncryptorWpf.Models
         /// </summary>
         /// <param name="userDbPath">Path to <see cref="User"/> database file.</param>
         /// <param name="certificateFolderPath">Path to folder with certificates.</param>
-        public DataComponents(string userDbPath, string certificateFolderPath, string authorityPath)
+        public DataComponents(string userDbPath, string certificateFolderPath)
         {
             UserDatabase = new UserDatabase(userDbPath);
-            CertificateManager = new CertificateManager(certificateFolderPath, authorityPath);
+            CertificateManager = new CertificateManager(certificateFolderPath);
         }
 
         public CertificateManager CertificateManager { get; }

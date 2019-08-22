@@ -24,24 +24,15 @@ namespace FileEncryptorWpf.Models
 
         internal void Register(string username, string certificateFilePath, string password, bool isExt = false)
         {
-            /*if(this.Username.Length<6)
-            {
-                throw new Exception("Username must be at least 6 characters long.");
-            }
-            else if(!this.IsExternal && password.Length<8)
-            {
-                throw new Exception("password must be at least 8 characters long.");
-            }
-            else if(!File.Exists(this.CertificateFilePath))
-            {
-                throw new Exception("That certificate file does not exist.");
-            }*/
-
             X509Certificate2 cert = new X509Certificate2(certificateFilePath);
 
             if (data.CertificateManager.VerifyCertificate(cert) == false)
             {
                 throw new Exception("Certificate is either not signed by the required CA or is invalid.");
+            }
+            else if (data.CertificateManager.VerifyKeyUsage(cert) == false)
+            {
+                throw new Exception("Certificate must have 'digitalSignature' and 'keyEncipherment' set as it's key usage.");
             }
 
             if (isExt)

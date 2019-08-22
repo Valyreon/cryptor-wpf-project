@@ -15,9 +15,8 @@ namespace Certificates
         /// Initializes a new instance of the <see cref="CertificateManager"/> class.
         /// </summary>
         /// <param name="certFolderPath">The folder where all the certification files are located.<see cref="string"/></param>
-        public CertificateManager(string certFolderPath, string pathToAuthority)
+        public CertificateManager(string certFolderPath)
         {
-            Authority = new X509Certificate2(pathToAuthority); // authority has to be set before ReloadCertificates
             this.CertificatesFolderPath = certFolderPath;
             this.ReloadCertificates();
 
@@ -40,8 +39,6 @@ namespace Certificates
 
         private List<X509Certificate2> Certificates { get; } = new List<X509Certificate2>();
 
-        public readonly X509Certificate2 Authority;
-
         public void ReloadCertificates()
         {
             Certificates.Clear();
@@ -51,10 +48,6 @@ namespace Certificates
                 try
                 {
                     X509Certificate2 certificate = new X509Certificate2(cert);
-                    if(certificate.Thumbprint != Authority.Thumbprint)
-                    {
-                        this.Certificates.Add(certificate);
-                    }
                 }
                 catch (Exception)
                 {
@@ -74,44 +67,44 @@ namespace Certificates
 
         public bool VerifyCertificate(X509Certificate2 certificateToValidate)
         {
-            X509Chain chain = new X509Chain();
-            chain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
-            chain.ChainPolicy.RevocationFlag = X509RevocationFlag.ExcludeRoot;
-            chain.ChainPolicy.VerificationFlags = X509VerificationFlags.AllowUnknownCertificateAuthority;
-            chain.ChainPolicy.VerificationTime = DateTime.Now;
-            chain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 0, 0);
-
-            // This part is very important. You're adding your known root here.
-            // It doesn't have to be in the computer store at all. Neither certificates do.
-            chain.ChainPolicy.ExtraStore.Add(Authority);
-
-            bool isChainValid = chain.Build(certificateToValidate);
-
-            if (!isChainValid)
+            using (X509Chain chain = new X509Chain())
             {
-                string[] errors = chain.ChainStatus
-                    .Select(x => String.Format("{0} ({1})", x.StatusInformation.Trim(), x.Status))
-                    .ToArray();
-                string certificateErrorsString = "Unknown errors.";
+                chain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
+                chain.ChainPolicy.RevocationFlag = X509RevocationFlag.EndCertificateOnly;
+                chain.ChainPolicy.VerificationFlags = X509VerificationFlags.AllowUnknownCertificateAuthority;
+                chain.ChainPolicy.VerificationTime = DateTime.Now;
 
-                if (errors != null && errors.Length > 0)
+                bool isChainValid = chain.Build(certificateToValidate);
+
+                if (!isChainValid)
                 {
-                    certificateErrorsString = String.Join(", ", errors);
+                    string[] errors = chain.ChainStatus
+                        .Select(x => String.Format("{0} ({1})", x.StatusInformation.Trim(), x.Status)) //TODO: Do you need this?
+                        .ToArray();
+                    string certificateErrorsString = "Unknown errors.";
+
+                    if (errors != null && errors.Length > 0)
+                    {
+                        certificateErrorsString = string.Join(", ", errors); 
+                    }
+
+                    return false;
                 }
 
-                throw new Exception("Trust chain did not complete to the known authority anchor. Errors: " + certificateErrorsString);
+                return true;
+            }
+        }
+
+        public bool VerifyKeyUsage(X509Certificate2 cert)
+        {
+            List<X509KeyUsageExtension> extensions = cert.Extensions.OfType<X509KeyUsageExtension>().ToList();
+            if (!extensions.Any())
+            {
+                return cert.Version < 3;
             }
 
-            // This piece makes sure it actually matches your known root
-            var valid = chain.ChainElements
-                .Cast<X509ChainElement>()
-                .Any(x => x.Certificate.Thumbprint == Authority.Thumbprint);
-
-            /*if (!valid)
-            {
-                throw new Exception("Trust chain did not complete to the known authority anchor. Thumbprints did not match.");
-            }*/
-            return valid;
+            List<X509KeyUsageFlags> keyUsageFlags = extensions.Select((ext) => ext.KeyUsages).ToList();
+            return keyUsageFlags.Contains(X509KeyUsageFlags.KeyEncipherment) && keyUsageFlags.Contains(X509KeyUsageFlags.DigitalSignature);
         }
     }
 }
