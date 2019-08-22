@@ -3,6 +3,7 @@ using CryptedStreamParsers;
 using CryptedStreamParsers.Cryptors;
 using System.IO;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FileEncryptorWpf.Models
 {
@@ -32,17 +33,18 @@ namespace FileEncryptorWpf.Models
             }
             else
             {
-                reporter?.Log("User found. Searching for user certificate...");
-                var cert = this.dataSource.CertificateManager.GetCertificate(receiver.CertificateThumbprint);
+                reporter?.Log("User found. Getting user certificate...");
+                var cert = new X509Certificate2(receiver.PublicCertificate);
+
                 if (cert == null)
                 {
-                    reporter?.Log("Certificate was not found. Aborting.");
+                    reporter?.Log("Certificate error. Aborting.");
                 }
                 else
                 {
-                    reporter?.Log("Certificate located. Verifying certificate...");
+                    reporter?.Log("Verifying certificate...");
 
-                    if (this.dataSource.CertificateManager.VerifyCertificate(cert) is false)
+                    if (this.dataSource.CertificateValidator.VerifyCertificate(cert) is false)
                     {
                         reporter?.Log("Receiver's certificate is invalid. Aborting.");
                     }

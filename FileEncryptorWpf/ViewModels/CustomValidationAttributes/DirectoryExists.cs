@@ -10,7 +10,7 @@ namespace FileEncryptorWpf.ViewModels.CustomValidationAttributes
 {
     public class DirectoryExists : ValidationAttribute
     {
-        bool invert = false;
+        readonly bool invert = false;
 
         public DirectoryExists()
         {

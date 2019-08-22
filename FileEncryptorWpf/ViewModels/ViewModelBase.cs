@@ -11,7 +11,7 @@ namespace FileEncryptorWpf.ViewModels
 {
     public class ViewModelBase : INotifyDataErrorInfo, INotifyPropertyChanged
     {
-        private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
+        private readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
         private readonly object _lock = new object();
         public bool HasErrors { get { return _errors.Any(propErrors => propErrors.Value != null && propErrors.Value.Count > 0); } }

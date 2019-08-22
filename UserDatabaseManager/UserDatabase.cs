@@ -28,39 +28,36 @@ namespace UserDatabaseManager
             return this.context.Users.Where(u => u.Username == username).SingleOrDefault();
         }
 
-        public User GetUserWithThumbprint(string thumbprint)
+        public void AddUser(string username, string password, byte[] certificate)
         {
-            return this.context.Users.Where(u => u.CertificateThumbprint == thumbprint).SingleOrDefault();
+            using (var hasher = SHA1.Create())
+            {
+                byte[] salt = new byte[16];
+                new Random().NextBytes(salt);
+                byte[] passBytes = Encoding.ASCII.GetBytes(password);
+                byte[] passHash = hasher.ComputeHash(Pepper.Concat(salt).Concat(passBytes).ToArray());
+
+                User toAdd = new User
+                {
+                    Username = username,
+                    PublicCertificate = certificate,
+                    Salt = salt,
+                    PassHash = passHash,
+                    IsExternal = false
+                };
+
+                this.context.Users.Add(toAdd);
+                this.context.SaveChanges();
+            }
         }
 
-        public void AddUser(string username, string password, string thumbprint)
+        public void AddExternal(string username, byte[] certificate)
         {
-            var hasher = SHA1.Create();
-            byte[] salt = new byte[16];
-            new Random().NextBytes(salt);
-            byte[] passBytes = Encoding.ASCII.GetBytes(password);
-            byte[] passHash = hasher.ComputeHash(Pepper.Concat(salt).Concat(passBytes).ToArray());
-
             User toAdd = new User
             {
                 Username = username,
-                CertificateThumbprint = thumbprint,
-                Salt = salt,
-                PassHash = passHash,
-                IsExternal = false
-            };
-
-            this.context.Users.Add(toAdd);
-            this.context.SaveChanges();
-        }
-
-        public void AddExternal(string username, string thumbprint)
-        {
-            User toAdd = new User
-            {
-                Username = username,
-                CertificateThumbprint = thumbprint,
-                IsExternal = true
+                IsExternal = true,
+                PublicCertificate = certificate
             };
 
             this.context.Users.Add(toAdd);

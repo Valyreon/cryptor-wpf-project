@@ -10,9 +10,7 @@ namespace FileEncryptorWpf.Models
     /// </summary>
     public class UserInformation
     {
-        private User user;
-
-        private X509Certificate2 certificate;
+        private readonly User user;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserInformation"/> class.
@@ -20,10 +18,9 @@ namespace FileEncryptorWpf.Models
         /// <param name="user"><see cref="User"/> instance that contains information from the database.</param>
         /// <param name="certificate">Certificate corresponding to <paramref name="user"/>.</param>
         /// <param name="privateKey"><see cref="RSAParameters"/> that contain private key of the <paramref name="user"/>.</param>
-        public UserInformation(User user, X509Certificate2 certificate, RSAParameters privateKey)
+        public UserInformation(User user, RSAParameters privateKey)
         {
             this.user = user;
-            this.certificate = certificate;
             this.PrivateKey = privateKey;
         }
 
@@ -31,8 +28,8 @@ namespace FileEncryptorWpf.Models
 
         public string Username { get => this.user.Username; }
 
-        public string CertificateThumbprint { get => this.user.CertificateThumbprint; }
+        public X509Certificate2 Certificate { get => new X509Certificate2(this.user.PublicCertificate); }
 
-        public RSAParameters PublicKey { get => ((RSACryptoServiceProvider)this.certificate.PublicKey.Key).ExportParameters(false); }
+        public RSAParameters PublicKey { get => ((RSACryptoServiceProvider)this.Certificate.PublicKey.Key).ExportParameters(false); }
     }
 }

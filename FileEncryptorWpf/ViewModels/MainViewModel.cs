@@ -37,7 +37,7 @@ namespace FileEncryptorWpf.ViewModels
         private string outputFilePath;
         private string otherPartyUsername;
         private bool isEncrypt;
-        private DataComponents dataSource;
+        private readonly DataComponents dataSource;
         private readonly UserInformation currentUserInfo;
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
-        [Required]
+        [Required(ErrorMessage = "Input file is required.")]
         [FileExists(ErrorMessage = "Specified input file does not exist.")]
         public string InputFilePath
         {
@@ -195,7 +195,7 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
-        [Required]
+        [Required(ErrorMessage = "Output file is required.")]
         [FileExists(invert: true, ErrorMessage = "This file already exists. Select another file.")]
         [DirectoryExists(invert: true, ErrorMessage = "This path is a directory. Select a file.")]
         public string OutputFilePath
@@ -212,7 +212,7 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
-        [Required]
+        [Required(ErrorMessage = "Other party username is required.")]
         public string OtherPartyUsername
         {
             get

@@ -7,7 +7,7 @@ using UserDatabaseManager;
 namespace FileEncryptorWpf.Models
 {
     /// <summary>
-    /// Defines the <see cref="DataComponents"/> which is used for accessing <see cref="User"/> database and <see cref="CertificateManager"/>.
+    /// Defines the <see cref="DataComponents"/> which is used for accessing <see cref="User"/> database and <see cref="CertificateValidator"/>.
     /// </summary>
     public class DataComponents
     {
@@ -16,13 +16,13 @@ namespace FileEncryptorWpf.Models
         /// </summary>
         /// <param name="userDbPath">Path to <see cref="User"/> database file.</param>
         /// <param name="certificateFolderPath">Path to folder with certificates.</param>
-        public DataComponents(string userDbPath, string certificateFolderPath)
+        public DataComponents(string userDbPath)
         {
             UserDatabase = new UserDatabase(userDbPath);
-            CertificateManager = new CertificateManager(certificateFolderPath);
+            CertificateValidator = new CertificateValidator();
         }
 
-        public CertificateManager CertificateManager { get; }
+        public CertificateValidator CertificateValidator { get; }
 
         public UserDatabase UserDatabase { get; }
     }

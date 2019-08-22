@@ -3,6 +3,7 @@ using PrivateKeyParsers;
 using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FileEncryptorWpf.Models
 {
@@ -27,20 +28,20 @@ namespace FileEncryptorWpf.Models
 
         public UserInformation Login(string username, string password, out DataComponents data)
         {
-            DataComponents dataComp = new DataComponents(userDatabasePath, certificationsFolderPath);
+            DataComponents dataComp = new DataComponents(userDatabasePath);
 
             var user = dataComp.UserDatabase.GetUser(username);
 
             if (user != null && user.IsPasswordValid(password))
             {
-                var userCert = dataComp.CertificateManager.GetCertificate(user.CertificateThumbprint);
+                var userCert = new X509Certificate2(user.PublicCertificate);
 
                 if(userCert==null)
                 {
-                    throw new Exception("That users certificate could not be found.");
+                    throw new Exception("Certificate error.");
                 }
 
-                if (dataComp.CertificateManager.VerifyCertificate(userCert) == false)
+                if (dataComp.CertificateValidator.VerifyCertificate(userCert) == false)
                 {
                     throw new Exception("Certificate is invalid.");
                 }
@@ -54,7 +55,7 @@ namespace FileEncryptorWpf.Models
                 }
 
                 data = dataComp;
-                return new UserInformation(user, userCert, privateParameters);
+                return new UserInformation(user, privateParameters);
             }
             else
             {

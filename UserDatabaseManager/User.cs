@@ -13,8 +13,6 @@ namespace UserDatabaseManager
 
         public string Username { get; set; }
 
-        public string CertificateThumbprint { get; set; }
-
         public byte[] Salt { get; set; }
 
         public byte[] PassHash { get; set; }
@@ -25,11 +23,13 @@ namespace UserDatabaseManager
 
         public bool IsPasswordValid(string password)
         {
-            var hasher = SHA1.Create();
-            byte[] passBytes = Encoding.ASCII.GetBytes(password);
-            var currentHash = hasher.ComputeHash(UserDatabase.Pepper.Concat(this.Salt).Concat(passBytes).ToArray());
+            using (var hasher = SHA1.Create())
+            {
+                byte[] passBytes = Encoding.ASCII.GetBytes(password);
+                var currentHash = hasher.ComputeHash(UserDatabase.Pepper.Concat(this.Salt).Concat(passBytes).ToArray());
 
-            return currentHash.SequenceEqual(this.PassHash);
+                return currentHash.SequenceEqual(this.PassHash);
+            }
         }
     }
 }

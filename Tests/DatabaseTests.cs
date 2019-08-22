@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using System.IO;
 using UserDatabaseManager;
 
 namespace Tests
@@ -13,13 +13,9 @@ namespace Tests
         /*[TestMethod]
         public void TestAddToDatabase()
         {
-            UserDatabase db = new UserDatabase("C:\\Users\\luka.budrak\\Downloads\\SQLiteStudio-3.2.1\\Users.db");
-
-            string path = "C:\\Users\\luka.budrak\\Downloads\\certificateExamples";
-            CertificateManagerSettings settings = new CertificateManagerSettings(null, path);
-            CertificateManager manager = new CertificateManager(settings);
-
-            db.AddUser("test", "default", manager.Certificates[0].Thumbprint);
+            UserDatabase db = new UserDatabase(@"C:\Users\luka.budrak\Desktop\cryptor-wpf-project\Users.db");
+            db.AddUser("default", "default", File.ReadAllBytes(@"C:\Users\luka.budrak\Desktop\cryptor-wpf-project\OPENSSL\certs\02.pem"));
+            db.AddUser("luka", "luka", File.ReadAllBytes(@"C:\Users\luka.budrak\Desktop\cryptor-wpf-project\OPENSSL\certs\03.pem"));
         }*/
 
         [TestMethod]

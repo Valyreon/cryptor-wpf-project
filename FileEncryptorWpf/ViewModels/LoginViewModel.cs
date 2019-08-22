@@ -36,7 +36,6 @@ namespace FileEncryptorWpf.ViewModels
             this.thisWindow = thisWindow;
             this.Username = "default";
             this.PrivateKeyFilePath = "OPENSSL\\private\\default.key";
-            this.CertificationsFolderPath = "OPENSSL\\certs";
             this.UserDatabasePath = "root\\Users.db";
             try
             {
@@ -44,28 +43,11 @@ namespace FileEncryptorWpf.ViewModels
                 {
                     PropertiesStreams.Properties props = new PropertiesStreams.Properties();
                     props.Load(propertyFile);
-                    this.CertificationsFolderPath = props.GetProperty("certs", string.Empty);
                     this.UserDatabasePath = props.GetProperty("userdb", string.Empty);
                 }
             }
             catch (Exception)
             {
-            }
-        }
-
-        [Required(ErrorMessage = "The path to certifications folder is required for proper functioning of the application.")]
-        [DirectoryExists(ErrorMessage = "Specified certificates folder path does not exist.")]
-        public string CertificationsFolderPath
-        {
-            get
-            {
-                return this.certificationsFolderPath;
-            }
-
-            set
-            {
-                this.certificationsFolderPath = value;
-                this.RaisePropertyChangedEvent("CertificationsFolderPath");
             }
         }
 
@@ -118,8 +100,6 @@ namespace FileEncryptorWpf.ViewModels
 
         public Dictionary<string, string> ValidationErrors = new Dictionary<string, string>();
 
-        public ICommand ChooseCertificateFolderCommand { get => new DelegateCommand(this.ChooseCertificateFolder); }
-
         public ICommand ChoosePrivateKeyCommand { get => new DelegateCommand(this.ChoosePrivateKey); }
 
         public ICommand ChooseUserDatabaseCommand { get => new DelegateCommand(this.ChooseUserDatabase); }
@@ -129,20 +109,6 @@ namespace FileEncryptorWpf.ViewModels
         public ICommand SaveSettingsCommand { get => new DelegateCommand(this.SaveSettings); }
 
         public ICommand RegisterCommand { get => new DelegateCommand(this.GoToRegister); }
-
-        private void ChooseCertificateFolder()
-        {
-            using (var fbd = new FolderBrowserDialog())
-            {
-                fbd.Description = "Choose folder that contains all the certificates for the app.";
-                var result = fbd.ShowDialog();
-
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    this.CertificationsFolderPath = fbd.SelectedPath;
-                }
-            }
-        }
 
         private void ChoosePrivateKey()
         {
@@ -186,7 +152,6 @@ namespace FileEncryptorWpf.ViewModels
         private void SaveSettings()
         {
             ClearErrors();
-            ValidateProperty(this.CertificationsFolderPath, "CertificationsFolderPath");
             ValidateProperty(this.UserDatabasePath, "UserDatabasePath");
 
             if (this.HasErrors)
@@ -198,7 +163,6 @@ namespace FileEncryptorWpf.ViewModels
                 using (FileStream propertyFile = new FileStream("settings.cfg", FileMode.Create))
                 {
                     PropertiesStreams.Properties props = new PropertiesStreams.Properties();
-                    props.AddProperty("certs", this.CertificationsFolderPath);
                     props.AddProperty("userdb", this.UserDatabasePath);
                     props.Store(propertyFile);
 
@@ -223,11 +187,6 @@ namespace FileEncryptorWpf.ViewModels
 
                     this.thisWindow.ChangeCurrentControlTo(new MainViewModel(userInfo, data, this.thisWindow));
                 }
-                else
-                {
-
-                }
-                
             }
             catch (InvalidKeyFileException)
             {
@@ -241,7 +200,7 @@ namespace FileEncryptorWpf.ViewModels
 
         private void GoToRegister()
         {
-            DataComponents data = new DataComponents(UserDatabasePath, CertificationsFolderPath);
+            DataComponents data = new DataComponents(UserDatabasePath);
             this.thisWindow.ChangeCurrentControlTo(new RegisterViewModel(this.thisWindow, this, data));
         }
     }
