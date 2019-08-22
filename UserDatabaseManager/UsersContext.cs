@@ -14,8 +14,7 @@ namespace UserDatabaseManager
                 {
                     ConnectionString = new SQLiteConnectionStringBuilder()
                     {
-                        DataSource = source,
-                        ForeignKeys = true
+                        DataSource = source
                     }
                     .ConnectionString
                 },
