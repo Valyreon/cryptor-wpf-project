@@ -72,8 +72,11 @@
                           DisplayMemberPath="Name" />
 
             <Label Content="{Binding UsernameLabel}" IsEnabled="True" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" />
-            <ComboBox IsEditable="True" Padding="3,0" IsEnabled="True" Height="26" Grid.Column="2" Grid.Row="3" VerticalContentAlignment="Center" Width="115" VerticalAlignment="Center"
-                         Text="{Binding OtherPartyUsername, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+            <ComboBox IsEnabled="True" Height="26" Grid.Column="2" Grid.Row="3" VerticalContentAlignment="Center" Width="115" VerticalAlignment="Center" HorizontalAlignment="Left"
+                         ItemsSource="{Binding AllUsers}"
+                         SelectedItem="{Binding SelectedUser}"
+                         DisplayMemberPath="Username"
+                      Text="Select user.."></ComboBox>
         </Grid>
         <Button Height="28" Margin="0,8,0,0" HorizontalAlignment="Center" Width="100"  IsDefault="true" Command="{Binding ApplyOperationCommand}" Background="#ffffff">Apply</Button>
     </StackPanel>

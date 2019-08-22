@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -62,6 +63,11 @@ namespace UserDatabaseManager
 
             this.context.Users.Add(toAdd);
             this.context.SaveChanges();
+        }
+
+        public IEnumerable<User> GetAllUsers()
+        {
+            return this.context.Users.AsEnumerable();
         }
     }
 }

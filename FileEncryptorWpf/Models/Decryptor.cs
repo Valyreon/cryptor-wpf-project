@@ -9,59 +9,43 @@ namespace FileEncryptorWpf.Models
 {
     public class Decryptor
     {
-        private readonly UserDatabase dataSource;
-        private readonly string senderUsername;
+        private readonly User sender;
         private readonly UserInformation currentUser;
 
-        public Decryptor(UserDatabase dataSource, string senderUsername, UserInformation currentUser)
+        public Decryptor(User sender, UserInformation currentUser)
         {
-            this.dataSource = dataSource;
-            this.senderUsername = senderUsername;
+            this.sender = sender;
             this.currentUser = currentUser;
         }
 
         public void DecryptFile(EncryptedFile input, FileStream output, ProgressReporter reporter = null)
         {
-            reporter?.Log("Parsing encrypted input file...");
+            var cert = new X509Certificate2(sender.PublicCertificate);
 
-            reporter?.Log("Getting sender information from database...");
-            var senderUser = this.dataSource.GetUser(this.senderUsername);
-            reporter?.SetPercentage(10);
-
-            if (senderUser == null)
+            if (cert == null)
             {
-                reporter?.Log((string.IsNullOrWhiteSpace(this.senderUsername) ? "No username provided. " : "User with specified ID is not in the database. ") + "Unable to verify integrity.");
+                reporter?.Log("Sender certificate error. Unable to verify integrity.");
             }
             else
             {
-                reporter?.Log("User found. Getting user's certificate...");
-                var cert = new X509Certificate2(senderUser.PublicCertificate);
-
-                if (cert == null)
+                reporter?.Log("Certificate located.");
+                if (CertificateValidator.VerifyCertificate(cert) == false)
                 {
-                    reporter?.Log("Certificate error. Unable to verify integrity.");
+                    reporter?.Log("Sender's certificate is INVALID. Continuing.");
+                }
+
+                reporter?.Log("Verifying file integrity...");
+                RSACryptoServiceProvider publicKeyProvider = (RSACryptoServiceProvider)cert.PublicKey.Key;
+                bool verifySuccess = EncryptedFileChecker.VerifySignature(input, publicKeyProvider.ExportParameters(false));
+                if (verifySuccess)
+                {
+                    reporter?.Log("File verification: SUCCESS");
                 }
                 else
                 {
-                    reporter?.Log("Certificate located.");
-                    if (CertificateValidator.VerifyCertificate(cert) == false)
-                    {
-                        reporter?.Log("Sender's certificate is INVALID. Continuing.");
-                    }
-
-                    reporter?.Log("Verifying file integrity...");
-                    RSACryptoServiceProvider publicKeyProvider = (RSACryptoServiceProvider)cert.PublicKey.Key;
-                    bool verifySuccess = EncryptedFileChecker.VerifySignature(input, publicKeyProvider.ExportParameters(false));
-                    if (verifySuccess)
-                    {
-                        reporter?.Log("File verification: SUCCESS");
-                    }
-                    else
-                    {
-                        reporter?.Log("File verification: FAILED");
-                    }
-                    reporter?.SetPercentage(25);
+                    reporter?.Log("File verification: FAILED");
                 }
+                reporter?.SetPercentage(25);
             }
 
             reporter?.Log("Decrypting file...");

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -36,10 +37,11 @@ namespace FileEncryptorWpf.ViewModels
         private bool areAlgorithmParametersEnabled;
         private string inputFilePath;
         private string outputFilePath;
-        private string otherPartyUsername;
         private bool isEncrypt;
         private readonly UserDatabase dataSource;
         private readonly UserInformation currentUserInfo;
+        private readonly List<User> allUsers = new List<User>();
+        private User selectedUser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
@@ -66,6 +68,9 @@ namespace FileEncryptorWpf.ViewModels
             this.encryptionAlgorithms.Add(new EncryptionAlgorithmChoice("TripleDES", new TDesMachine()));
             this.encryptionAlgorithms.Add(new EncryptionAlgorithmChoice("Twofish", new TwofishMachine()));
             this.ChosenEncryptionAlgorithm = this.encryptionAlgorithms[0];
+
+            this.allUsers.AddRange(data.GetAllUsers().Where((user) => user.Username != currentUser.Username));
+            //selectedUser = allUsers[0];
         }
 
         public IList<string> OperationModes
@@ -76,6 +81,11 @@ namespace FileEncryptorWpf.ViewModels
         public IList<HashAlgorithmChoice> HashAlgorithms
         {
             get { return this.hashAlgorithms; }
+        }
+
+        public IList<User> AllUsers
+        {
+            get { return this.allUsers; }
         }
 
         public HashAlgorithmChoice ChosenHashAlgorithm
@@ -89,6 +99,20 @@ namespace FileEncryptorWpf.ViewModels
             {
                 this.chosenHashAlgorithm = value;
                 this.RaisePropertyChangedEvent("ChosenHashAlgorithm");
+            }
+        }
+
+        public User SelectedUser
+        {
+            get
+            {
+                return this.selectedUser;
+            }
+
+            set
+            {
+                this.selectedUser = value;
+                this.RaisePropertyChangedEvent("SelectedUser");
             }
         }
 
@@ -197,7 +221,6 @@ namespace FileEncryptorWpf.ViewModels
         }
 
         [Required(ErrorMessage = "Output file is required.")]
-        [FileExists(invert: true, ErrorMessage = "This file already exists. Select another file.")]
         [DirectoryExists(invert: true, ErrorMessage = "This path is a directory. Select a file.")]
         public string OutputFilePath
         {
@@ -213,21 +236,6 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
-        [Required(ErrorMessage = "Other party username is required.")]
-        public string OtherPartyUsername
-        {
-            get
-            {
-                return this.otherPartyUsername;
-            }
-
-            set
-            {
-                this.otherPartyUsername = value;
-                this.RaisePropertyChangedEvent("OtherParty");
-            }
-        }
-
         public ICommand ApplyOperationCommand { get => new DelegateCommand(this.ApplyOperation); }
 
         public ICommand ChooseInputFileCommand { get => new DelegateCommand(this.ChooseInputFile); }
@@ -239,13 +247,6 @@ namespace FileEncryptorWpf.ViewModels
             this.Validate();
             if (this.HasErrors)
                 return;
-
-            bool userExists = !(this.dataSource.GetUser(OtherPartyUsername) is null);
-            if (!userExists)
-            {
-                System.Windows.Forms.MessageBox.Show("That user does not exist in the database.", "Error");
-                return;
-            }
 
             OutputViewModel outputViewModel = new OutputViewModel(this.thisWindow, this);
             this.thisWindow.ChangeCurrentControlTo(outputViewModel);
@@ -265,7 +266,7 @@ namespace FileEncryptorWpf.ViewModels
                             using (FileStream output = new FileStream(this.OutputFilePath, FileMode.Create))
                             {
                                 OriginalFile origin = new OriginalFile(input, Path.GetExtension(input.Name));
-                                Encryptor encryptor = new Encryptor(dataSource, otherPartyUsername, currentUserInfo, new CryptCombo(chosenHashAlgorithm.HashMachine, chosenEncryptionAlgorithm.CryptMachine));
+                                Encryptor encryptor = new Encryptor(selectedUser, currentUserInfo, new CryptCombo(chosenHashAlgorithm.HashMachine, chosenEncryptionAlgorithm.CryptMachine));
                                 encryptor.EncryptFile(origin, output, reporter);
                             }
                         }
@@ -274,7 +275,7 @@ namespace FileEncryptorWpf.ViewModels
                             var cryptedFile = EncryptedFileChecker.Parse(input);
                             using (var output = new FileStream(this.OutputFilePath + cryptedFile.FormatExtension, FileMode.Create))
                             {
-                                Decryptor decryptor = new Decryptor(dataSource, otherPartyUsername, currentUserInfo);
+                                Decryptor decryptor = new Decryptor(selectedUser, currentUserInfo);
                                 decryptor.DecryptFile(cryptedFile, output, reporter);
                             }
                         }
