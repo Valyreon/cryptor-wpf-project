@@ -12,16 +12,14 @@ namespace FileEncryptorWpf.Models
     /// </summary>
     public class LoginManager
     {
-        private readonly string certificationsFolderPath;
         private readonly string privateKeyPath;
         private readonly string userDatabasePath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginManager"/> class.
         /// </summary>
-        public LoginManager(string certs, string privKey, string userDb)
+        public LoginManager(string privKey, string userDb)
         {
-            certificationsFolderPath = certs;
             privateKeyPath = privKey;
             userDatabasePath = userDb;
         }

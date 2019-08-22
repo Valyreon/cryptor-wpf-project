@@ -21,7 +21,7 @@ namespace Tests
         [TestMethod]
         public void TestPassword()
         {
-            UserDatabase db = new UserDatabase("C:\\Users\\luka.budrak\\Downloads\\SQLiteStudio-3.2.1\\Users.db");
+            UserDatabase db = new UserDatabase(@"C:\Users\luka.budrak\Desktop\cryptor-wpf-project\Users.db");
             User def = db.GetUser("default");
             Assert.IsTrue(def.IsPasswordValid("default"));
         }

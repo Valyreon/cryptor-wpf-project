@@ -61,20 +61,11 @@
                         <ColumnDefinition Width="6*"></ColumnDefinition>
                         <ColumnDefinition Width="2*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Certificates:</Label>
+
+                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">User DB:</Label>
                     <TextBox Padding="3,0" Grid.Column="1" Grid.Row="0" Margin="5,0" VerticalContentAlignment="Center" Height="28"
-                                 Text="{Binding CertificationsFolderPath, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                    <Button Grid.Column="2" Grid.Row="0" Height="28" Margin="5,0" Command="{Binding ChooseCertificateFolderCommand}" Background="#ffffff">Choose</Button>
-
-                    <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">User DB:</Label>
-                    <TextBox Padding="3,0" Grid.Column="1" Grid.Row="2" Margin="5,0" VerticalContentAlignment="Center" Height="28"
                                  Text="{Binding UserDatabasePath, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                    <Button Grid.Column="2" Grid.Row="2" Height="28" Margin="5,0" Command="{Binding ChooseUserDatabaseCommand}" Background="#ffffff">Choose</Button>
-
-                    <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Authority:</Label>
-                    <TextBox Padding="3,0" Grid.Column="1" Grid.Row="4" Margin="5,0" VerticalContentAlignment="Center" Height="28"
-                                 Text="{Binding AuthorityCertPath, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                    <Button Grid.Column="2" Grid.Row="4" Height="28" Margin="5,0" Command="{Binding ChooseAuthorityCommand}" Background="#ffffff">Choose</Button>
+                    <Button Grid.Column="2" Grid.Row="0" Height="28" Margin="5,0" Command="{Binding ChooseUserDatabaseCommand}" Background="#ffffff">Choose</Button>
 
                     <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6" Height="28" Margin="5,0" Command="{Binding SaveSettingsCommand}" Width="100" Background="#ffffff" HorizontalAlignment="Center">Save</Button>
                 </Grid>

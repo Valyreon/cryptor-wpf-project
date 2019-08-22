@@ -19,8 +19,6 @@ namespace FileEncryptorWpf.ViewModels
     {
         private readonly IView thisWindow;
 
-        private string certificationsFolderPath;
-
         private string privateKeyPath;
 
         private string userDatabasePath;
@@ -182,7 +180,7 @@ namespace FileEncryptorWpf.ViewModels
                 this.Validate();
                 if(!this.HasErrors)
                 {
-                    LoginManager loginManager = new LoginManager(certificationsFolderPath, privateKeyPath, userDatabasePath);
+                    LoginManager loginManager = new LoginManager(privateKeyPath, userDatabasePath);
                     var userInfo = loginManager.Login(this.username, (passBox as PasswordBox).Password, out var data);
 
                     this.thisWindow.ChangeCurrentControlTo(new MainViewModel(userInfo, data, this.thisWindow));

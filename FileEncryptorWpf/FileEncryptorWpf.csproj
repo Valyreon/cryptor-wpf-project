@@ -82,6 +82,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\CertificateValidator.cs" />
     <Compile Include="Models\Decryptor.cs" />
     <Compile Include="Models\Encryptor.cs" />
     <Compile Include="Models\Processor.cs" />
@@ -199,10 +200,6 @@
     <ProjectReference Include="..\AlgorithmLibrary\AlgorithmLibrary.csproj">
       <Project>{4fc5e4f0-692b-4166-b1dc-74a67606c023}</Project>
       <Name>AlgorithmLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CertificateManager\CertificateManager.csproj">
-      <Project>{20a7e7ae-a889-4b4d-8b49-23b73b771f37}</Project>
-      <Name>CertificateManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\CryptedStreamParsers\CryptedStreamParsers.csproj">
       <Project>{a9f446f2-1b75-4bf9-bf95-9450de79d105}</Project>

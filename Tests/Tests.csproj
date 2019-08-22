@@ -79,10 +79,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CertificateManager\CertificateManager.csproj">
-      <Project>{20A7E7AE-A889-4B4D-8B49-23B73B771F37}</Project>
-      <Name>CertificateManager</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CryptedStreamParsers\CryptedStreamParsers.csproj">
       <Project>{A9F446F2-1B75-4BF9-BF95-9450DE79D105}</Project>
       <Name>CryptedStreamParsers</Name>
