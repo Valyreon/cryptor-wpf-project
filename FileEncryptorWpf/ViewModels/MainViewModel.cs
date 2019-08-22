@@ -16,6 +16,7 @@ using FileEncryptorWpf.Models;
 using FileEncryptorWpf.Models.ComboBoxObjects;
 using FileEncryptorWpf.ViewModels.CustomValidationAttributes;
 using FileEncryptorWpf.Views;
+using UserDatabaseManager;
 
 namespace FileEncryptorWpf.ViewModels
 {
@@ -37,7 +38,7 @@ namespace FileEncryptorWpf.ViewModels
         private string outputFilePath;
         private string otherPartyUsername;
         private bool isEncrypt;
-        private readonly DataComponents dataSource;
+        private readonly UserDatabase dataSource;
         private readonly UserInformation currentUserInfo;
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace FileEncryptorWpf.ViewModels
         /// <param name="currentUser">All the required information about the current logged in user.</param>
         /// <param name="data">Instance of <see cref="DataComponents"/> that allows access to user database and certificates.</param>
         /// <param name="thisWindow">Window in which MainControl is shown.</param>
-        public MainViewModel(UserInformation currentUser, DataComponents data, IView thisWindow)
+        public MainViewModel(UserInformation currentUser, UserDatabase data, IView thisWindow)
         {
             this.dataSource = data;
             this.currentUserInfo = currentUser;
@@ -239,7 +240,7 @@ namespace FileEncryptorWpf.ViewModels
             if (this.HasErrors)
                 return;
 
-            bool userExists = !(this.dataSource.UserDatabase.GetUser(OtherPartyUsername) is null);
+            bool userExists = !(this.dataSource.GetUser(OtherPartyUsername) is null);
             if (!userExists)
             {
                 System.Windows.Forms.MessageBox.Show("That user does not exist in the database.", "Error");

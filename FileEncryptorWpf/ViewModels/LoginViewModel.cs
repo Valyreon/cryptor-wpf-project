@@ -9,6 +9,7 @@ using System.IO;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using UserDatabaseManager;
 
 namespace FileEncryptorWpf.ViewModels
 {
@@ -157,7 +158,7 @@ namespace FileEncryptorWpf.ViewModels
 
             try
             {
-                
+
                 using (FileStream propertyFile = new FileStream("settings.cfg", FileMode.Create))
                 {
                     PropertiesStreams.Properties props = new PropertiesStreams.Properties();
@@ -198,7 +199,7 @@ namespace FileEncryptorWpf.ViewModels
 
         private void GoToRegister()
         {
-            DataComponents data = new DataComponents(UserDatabasePath);
+            UserDatabase data = new UserDatabase(UserDatabasePath);
             this.thisWindow.ChangeCurrentControlTo(new RegisterViewModel(this.thisWindow, this, data));
         }
     }

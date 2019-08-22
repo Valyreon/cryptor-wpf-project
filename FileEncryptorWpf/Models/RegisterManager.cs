@@ -8,9 +8,9 @@ namespace FileEncryptorWpf.Models
 {
     public class RegisterManager
     {
-        private readonly DataComponents data;
+        private readonly UserDatabase data;
 
-        public RegisterManager(DataComponents data)
+        public RegisterManager(UserDatabase data)
         {
             this.data = data;
         }
@@ -19,22 +19,22 @@ namespace FileEncryptorWpf.Models
         {
             X509Certificate2 cert = new X509Certificate2(certificateFilePath);
 
-            if (data.CertificateValidator.VerifyCertificate(cert) == false)
+            if (CertificateValidator.VerifyCertificate(cert) == false)
             {
-                throw new Exception("Certificate is either not signed by the required CA or is invalid.");
+                throw new Exception("Certificate is invalid.");
             }
-            else if (data.CertificateValidator.VerifyKeyUsage(cert) == false)
+            else if (CertificateValidator.VerifyKeyUsage(cert) == false)
             {
                 throw new Exception("Certificate must have 'digitalSignature' and 'keyEncipherment' set as it's key usage.");
             }
 
             if (isExt)
             {
-                this.data.UserDatabase.AddExternal(username, File.ReadAllBytes(certificateFilePath));
+                this.data.AddExternal(username, File.ReadAllBytes(certificateFilePath));
             }
             else
             {
-                this.data.UserDatabase.AddUser(username, password, File.ReadAllBytes(certificateFilePath));
+                this.data.AddUser(username, password, File.ReadAllBytes(certificateFilePath));
             }
         }
     }

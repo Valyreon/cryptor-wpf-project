@@ -4,23 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Certificates
+namespace FileEncryptorWpf.Models
 {
     /// <summary>
     /// Defines the <see cref="CertificateValidator"/> class which loads and manages certificates from a directory.
     /// </summary>
-    public class CertificateValidator
+    public static class CertificateValidator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CertificateValidator"/> class.
-        /// </summary>
-        /// <param name="certFolderPath">The folder where all the certification files are located.<see cref="string"/></param>
-        public CertificateValidator()
-        {
-            
-        }
-
-        public bool VerifyCertificate(X509Certificate2 certificateToValidate)
+        public static bool VerifyCertificate(X509Certificate2 certificateToValidate)
         {
             using (X509Chain chain = new X509Chain())
             {
@@ -40,7 +31,7 @@ namespace Certificates
 
                     if (errors != null && errors.Length > 0)
                     {
-                        certificateErrorsString = string.Join(", ", errors); 
+                        certificateErrorsString = string.Join(", ", errors);
                     }
 
                     return false;
@@ -50,7 +41,7 @@ namespace Certificates
             }
         }
 
-        public bool VerifyKeyUsage(X509Certificate2 cert)
+        public static bool VerifyKeyUsage(X509Certificate2 cert)
         {
             List<X509KeyUsageExtension> extensions = cert.Extensions.OfType<X509KeyUsageExtension>().ToList();
             if (!extensions.Any())

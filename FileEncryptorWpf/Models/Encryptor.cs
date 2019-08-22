@@ -4,17 +4,18 @@ using CryptedStreamParsers.Cryptors;
 using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using UserDatabaseManager;
 
 namespace FileEncryptorWpf.Models
 {
     public class Encryptor
     {
-        private readonly DataComponents dataSource;
+        private readonly UserDatabase dataSource;
         private readonly string receiverUsername;
         private readonly UserInformation currentUser;
         private readonly CryptCombo combo;
 
-        public Encryptor(DataComponents dataSource, string receiverUsername, UserInformation currentUser, CryptCombo combo)
+        public Encryptor(UserDatabase dataSource, string receiverUsername, UserInformation currentUser, CryptCombo combo)
         {
             this.dataSource = dataSource;
             this.receiverUsername = receiverUsername;
@@ -25,7 +26,7 @@ namespace FileEncryptorWpf.Models
         public void EncryptFile(OriginalFile input, FileStream output, ProgressReporter reporter = null)
         {
             reporter?.Log("Getting receiver information from database...");
-            var receiver = this.dataSource.UserDatabase.GetUser(this.receiverUsername);
+            var receiver = this.dataSource.GetUser(this.receiverUsername);
             reporter?.SetPercentage(15);
             if (receiver == null)
             {
@@ -44,7 +45,7 @@ namespace FileEncryptorWpf.Models
                 {
                     reporter?.Log("Verifying certificate...");
 
-                    if (this.dataSource.CertificateValidator.VerifyCertificate(cert) is false)
+                    if (CertificateValidator.VerifyCertificate(cert) is false)
                     {
                         reporter?.Log("Receiver's certificate is invalid. Aborting.");
                     }

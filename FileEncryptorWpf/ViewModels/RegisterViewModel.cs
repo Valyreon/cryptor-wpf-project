@@ -18,9 +18,9 @@ namespace FileEncryptorWpf.ViewModels
         private string password;
         private string certificateFilePath;
         private bool isExternal;
-        private readonly DataComponents data;
+        private readonly UserDatabase data;
 
-        public RegisterViewModel(IView thisWindow, object backControl, DataComponents data)
+        public RegisterViewModel(IView thisWindow, object backControl, UserDatabase data)
         {
             this.thisWindow = thisWindow;
             this.backControl = backControl;

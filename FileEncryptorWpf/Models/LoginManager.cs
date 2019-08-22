@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using UserDatabaseManager;
 
 namespace FileEncryptorWpf.Models
 {
@@ -24,11 +25,11 @@ namespace FileEncryptorWpf.Models
             userDatabasePath = userDb;
         }
 
-        public UserInformation Login(string username, string password, out DataComponents data)
+        public UserInformation Login(string username, string password, out UserDatabase data)
         {
-            DataComponents dataComp = new DataComponents(userDatabasePath);
+            UserDatabase dataComp = new UserDatabase(userDatabasePath);
 
-            var user = dataComp.UserDatabase.GetUser(username);
+            var user = dataComp.GetUser(username);
 
             if (user != null && user.IsPasswordValid(password))
             {
@@ -39,7 +40,7 @@ namespace FileEncryptorWpf.Models
                     throw new Exception("Certificate error.");
                 }
 
-                if (dataComp.CertificateValidator.VerifyCertificate(userCert) == false)
+                if (CertificateValidator.VerifyCertificate(userCert) == false)
                 {
                     throw new Exception("Certificate is invalid.");
                 }

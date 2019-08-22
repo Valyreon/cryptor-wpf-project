@@ -3,16 +3,17 @@ using CryptedStreamParsers;
 using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using UserDatabaseManager;
 
 namespace FileEncryptorWpf.Models
 {
     public class Decryptor
     {
-        private readonly DataComponents dataSource;
+        private readonly UserDatabase dataSource;
         private readonly string senderUsername;
         private readonly UserInformation currentUser;
 
-        public Decryptor(DataComponents dataSource, string senderUsername, UserInformation currentUser)
+        public Decryptor(UserDatabase dataSource, string senderUsername, UserInformation currentUser)
         {
             this.dataSource = dataSource;
             this.senderUsername = senderUsername;
@@ -24,7 +25,7 @@ namespace FileEncryptorWpf.Models
             reporter?.Log("Parsing encrypted input file...");
 
             reporter?.Log("Getting sender information from database...");
-            var senderUser = this.dataSource.UserDatabase.GetUser(this.senderUsername);
+            var senderUser = this.dataSource.GetUser(this.senderUsername);
             reporter?.SetPercentage(10);
 
             if (senderUser == null)
@@ -43,7 +44,7 @@ namespace FileEncryptorWpf.Models
                 else
                 {
                     reporter?.Log("Certificate located.");
-                    if (this.dataSource.CertificateValidator.VerifyCertificate(cert) == false)
+                    if (CertificateValidator.VerifyCertificate(cert) == false)
                     {
                         reporter?.Log("Sender's certificate is INVALID. Continuing.");
                     }

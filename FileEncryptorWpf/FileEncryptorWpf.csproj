@@ -144,7 +144,6 @@
     </Compile>
     <Compile Include="ViewModels\ComboBoxObjects\EncryptionAlgorithmChoice.cs" />
     <Compile Include="ViewModels\ComboBoxObjects\HashAlgorithmChoice.cs" />
-    <Compile Include="Models\DataComponents.cs" />
     <Compile Include="Models\LoginManager.cs" />
     <Compile Include="Models\UserInformation.cs" />
     <Compile Include="ViewModels\DelegateCommand.cs" />
