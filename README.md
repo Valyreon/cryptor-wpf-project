@@ -13,7 +13,7 @@ This software is modification of a project I did for a course **Cryptography and
 as a reference for **MVVM (Model-View-ViewModel)** architecture and **X.509 Certificates**.
 
 ### Technologies
-
+---
 Cryptor is written in **C#** and requires **[.NET Framework 4.7.2](https://dotnet.microsoft.com/download/thank-you/net472)** to run. It was developed in Visual Studio Community 2019.
 Application's user interface is implemented using **Windows Presentation Foundation (WPF)** and it uses **[SQLite](https://www.sqlite.org/index.html)** with **Entity Framework 6**
 to store data.
@@ -22,13 +22,14 @@ Also for the implementation of the 'Twofish' algorithm I used the **[BouncyCastl
 developers for the great work they did developing it.
 
 ### Algorithms
+---
 
 Cryptor for now supports three encryption algorithms: 
 * Advanced Encryption Standard (AES)
 * Triple DES
 * Twofish
 
-**RSA algorithm** is used for key encryption and generating a digital signature of the file.
+**RSA cryptosystem** is used for key encryption and generating a digital signature of the file.
 
 For hashing there are two algorithms the application can use:
 * SHA256
@@ -36,10 +37,17 @@ For hashing there are two algorithms the application can use:
 
 Because the application uses polymorphism and MVVM architecture it would be easy to further expand the collection of supported algorithms by implementing correct interfaces.
 
-### Implementation
+### Domain
+---
+This application's domain includes other users, encrypted and decrypted files, private keys and public certificates among other entities. Application is used locally, the
+certificate and file sharing is not implemented and is not this app's concern. 
 
+### Implementation
+---
 Project **AlgorithmLibrary** contains implementation for encryption algorithms like **AES**, **Twofish** and **TripleDES**. Every algorithm 'machine' should
 implement the **IMachine** interface so the application stays easily extensible with new algorithms by using **polymorphism**. This project should contain hash algorithms that implement 
 the abstract class **System.Security.Cryptography.HashAlgorithm**. Hashing algorithms I used were already implemented in .NET.
 
 **CryptedStreamParsers** project contains all neccessary classes for encrypting and decrypting
+
+To use the application user first needs to register. To do that, he needs to provide the system with an **Username**, **Password** and his **X.509 Public Certificate** file.
