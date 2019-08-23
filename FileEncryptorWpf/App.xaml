@@ -7,14 +7,12 @@
             <Setter Property="Validation.ErrorTemplate">
                 <Setter.Value>
                     <ControlTemplate>
-                        <Grid HorizontalAlignment="Stretch">
-                            <DockPanel HorizontalAlignment="Right">
-                                <Grid HorizontalAlignment="Stretch">
-                                    <AdornedElementPlaceholder x:Name="errorControl"/>
-                                </Grid>
-                                <Image Width="16" Height="16" Margin="-26,0,0,0"  ToolTip="{Binding [0].ErrorContent}" Source="Resources/error-image.png"></Image>
-                            </DockPanel>
-                        </Grid>
+                        <DockPanel HorizontalAlignment="Right">
+                            <Grid HorizontalAlignment="Stretch">
+                                <AdornedElementPlaceholder x:Name="errorControl"/>
+                            </Grid>
+                            <Image Width="16" Height="16" Margin="-26,0,0,0"  ToolTip="{Binding [0].ErrorContent}" Source="Resources/error-image.png"></Image>
+                        </DockPanel>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

@@ -39,9 +39,11 @@
 
                     <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button IsDefault="True" Height="28" Margin="5,0" Width="100" Command="{Binding LoginCommand}"
-                                CommandParameter="{Binding ElementName=passwordBox}" Background="#ffffff">Login</Button>
+                                CommandParameter="{Binding ElementName=passwordBox}" Background="#ffffff"
+                                IsEnabled="{Binding AreActionsEnabled, UpdateSourceTrigger=PropertyChanged}">Login</Button>
                         <Button IsDefault="True" Height="28" Margin="5,0" Width="100" Command="{Binding RegisterCommand}"
-                                Background="#ffffff">Register</Button>
+                                Background="#ffffff"
+                                IsEnabled="{Binding AreActionsEnabled, UpdateSourceTrigger=PropertyChanged}">Register</Button>
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -67,7 +69,7 @@
                                  Text="{Binding UserDatabasePath, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     <Button Grid.Column="2" Grid.Row="0" Height="28" Margin="5,0" Command="{Binding ChooseUserDatabaseCommand}" Background="#ffffff">Choose</Button>
 
-                    <Button Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6" Height="28" Margin="5,0" Command="{Binding SaveSettingsCommand}" Width="100" Background="#ffffff" HorizontalAlignment="Center">Save</Button>
+                    <Button IsEnabled="{Binding AreActionsEnabled, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="6" Height="28" Margin="5,0" Command="{Binding SaveSettingsCommand}" Width="100" Background="#ffffff" HorizontalAlignment="Center">Save</Button>
                 </Grid>
             </TabItem>
         </TabControl>

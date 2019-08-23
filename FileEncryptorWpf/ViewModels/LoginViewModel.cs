@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -25,6 +26,8 @@ namespace FileEncryptorWpf.ViewModels
 
         private string username;
 
+        private bool areActionsEnabled;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
         /// </summary>
@@ -35,6 +38,7 @@ namespace FileEncryptorWpf.ViewModels
             this.Username = "default";
             this.PrivateKeyFilePath = "OPENSSL\\private\\default.key";
             this.UserDatabasePath = "root\\Users.db";
+            this.AreActionsEnabled = true;
             try
             {
                 using (FileStream propertyFile = new FileStream("settings.cfg", FileMode.Open))
@@ -93,6 +97,19 @@ namespace FileEncryptorWpf.ViewModels
             {
                 this.username = value;
                 this.RaisePropertyChangedEvent("Username");
+            }
+        }
+        public bool AreActionsEnabled
+        {
+            get
+            {
+                return this.areActionsEnabled;
+            }
+
+            set
+            {
+                this.areActionsEnabled = value;
+                this.RaisePropertyChangedEvent("AreActionsEnabled");
             }
         }
 
@@ -170,15 +187,17 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
-        private void TryToLogin(object passBox)
+        private async void TryToLogin(object passBox)
         {
             try
             {
                 this.Validate();
                 if (!this.HasErrors)
                 {
+                    this.AreActionsEnabled = false;
+                    UserDatabase data = null;
                     LoginManager loginManager = new LoginManager(this.PrivateKeyFilePath, this.UserDatabasePath);
-                    var userInfo = loginManager.Login(this.username, (passBox as PasswordBox).Password, out var data);
+                    var userInfo = await Task.Run(() => loginManager.Login(this.username, (passBox as PasswordBox).Password, out data));
 
                     this.thisWindow.ChangeCurrentControlTo(new MainViewModel(userInfo, data, this.thisWindow));
                 }
@@ -190,6 +209,9 @@ namespace FileEncryptorWpf.ViewModels
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error");
+            } finally
+            {
+                this.AreActionsEnabled = true;
             }
         }
 
