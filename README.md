@@ -6,7 +6,7 @@ built in **PKI** and can encrypt files using several encryption and hashing algo
 
 Cryptor works by generating a random password or key for the encryption algorithm, encrypting the data block by block and then encrypting the encryption key using
 the receivers public key and writing it all in a file with **custom format**. That file is then digitally signed using the senders private key and the signature is appended to
-the file. To decrypt, receiver only needs to have his **private key** which matches the public key used by the sender. Because it encrypts files by dividing it into smaller
+the file. To decrypt, receiver only needs to have his **private key** which matches the public key used by the sender. Because it encrypts files by dividing them into smaller
 blocks, it can be used for encrypting very large files. Speed depends on algorithms used.
 
 This software is modification of a project I did for a course **Cryptography and Computer Protection** at my University. I had fun developing it. It can be used
@@ -49,6 +49,9 @@ check if the private key matches the public key, and it will only login if they 
 In the main form, user can set all the desired parameters: **input file**, **output file**, **algorithms** to use, **mode** and **sender**/**receiver**. If mode of operation is decryption, system will deduce the algorithms
 used from the header of the encrypted file.
 
+Application provides data validation so any textbox with an invalid entry will be marked with a red **X** on the right side and it's
+tooltip will contain an explanation.
+
 During encryption or encryption user will be presented with a progress bar and a text area where application will log it's progress.
 
 #### Testing
@@ -81,8 +84,8 @@ the abstract class System.Security.Cryptography.**HashAlgorithm**. Hashing algor
 a file, it can be a memory stream or something else. **PrivateKeyParsers** project contains neccessary classes for reading private key files.
 
 Project **FileEncryptorWpf** contains all the Models, Views and ViewModels. Every ViewModel inherits the abstract class
-ViewModelBase which implements interfaces **INotifyDataErrorInfo** and **INotifyPropertyChanged**. *INotifyDataErrorInfo* provides
-custom synchronous and asynchronous validation support and *INotifyPropertyChanged* which is used for notifying Views that a property value has changed.
+ViewModelBase which implements interfaces INotifyDataErrorInfo and INotifyPropertyChanged. **INotifyDataErrorInfo** provides
+custom synchronous and asynchronous validation support and **INotifyPropertyChanged** is used for notifying Views that a property value has changed.
 
 ### Screenshots
 ---
