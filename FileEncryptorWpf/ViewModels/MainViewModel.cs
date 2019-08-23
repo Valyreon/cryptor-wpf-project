@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -246,6 +243,15 @@ namespace FileEncryptorWpf.ViewModels
                 return;
             }
 
+            if(File.Exists(this.OutputFilePath))
+            {
+                var messageBoxResult = System.Windows.MessageBox.Show("Specified output file already exists. This action will overwrite it. Do you want to continue?", "Overwrite Confirmation", MessageBoxButton.YesNo);
+                if (messageBoxResult == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
             OutputViewModel outputViewModel = new OutputViewModel(this.thisWindow, this);
             this.thisWindow.ChangeCurrentControlTo(outputViewModel);
 
@@ -283,6 +289,10 @@ namespace FileEncryptorWpf.ViewModels
                 {
                     outputViewModel.WriteLine("FATAL ERROR: " + ex.Message);
                     outputViewModel.CurrentOperationProgress = 100;
+                    if (File.Exists(this.OutputFilePath))
+                    {
+                        File.Delete(this.OutputFilePath);
+                    }
                 }
                 finally
                 {
