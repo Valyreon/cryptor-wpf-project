@@ -80,11 +80,17 @@ the abstract class System.Security.Cryptography.**HashAlgorithm**. Hashing algor
 **CryptedStreamParsers** project contains all neccessary classes for encrypting and decrypting streams. Every class here works with streams, so encrypted data doesn't neccessarilly needs to be
 a file, it can be a memory stream or something else. **PrivateKeyParsers** project contains neccessary classes for reading private key files.
 
-Project **FileEncryptorWpf** contains the **WPF** project.
+Project **FileEncryptorWpf** contains all the Models, Views and ViewModels. Every ViewModel inherits the abstract class
+ViewModelBase which implements interfaces **INotifyDataErrorInfo** and **INotifyPropertyChanged**. *INotifyDataErrorInfo* provides
+custom synchronous and asynchronous validation support and *INotifyPropertyChanged* which is used for notifying Views that a property value has changed.
 
 ### Screenshots
 ---
 
-<img src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/cryptor-main-form.PNG?raw=true"><img>
+<center><img src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/cryptor-main-form.PNG?raw=true"><img></center>
 <img src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/cryptor-login.PNG?raw=true"><img>
 <img src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/cryptor-output.PNG?raw=true"><img>
+
+----
+
+<center>This free software was developed by <i><strong><a href="https://www.linkedin.com/in/luka-budrak/">Luka B.</a></strong></i></center>
