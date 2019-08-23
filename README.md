@@ -87,10 +87,9 @@ custom synchronous and asynchronous validation support and *INotifyPropertyChang
 ### Screenshots
 ---
 
-<center><img src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/cryptor-main-form.PNG?raw=true"><img></center>
+<img align="center" src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/cryptor-main-form.PNG?raw=true"><img>
 <img src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/cryptor-login.PNG?raw=true"><img>
 <img src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/cryptor-output.PNG?raw=true"><img>
 
 ----
-
-<center>This free software was developed by <i><strong><a href="https://www.linkedin.com/in/luka-budrak/">Luka B.</a></strong></i></center>
+This free software was developed by <i><strong><a href="https://www.linkedin.com/in/luka-budrak/">Luka B.</a></strong></i>
