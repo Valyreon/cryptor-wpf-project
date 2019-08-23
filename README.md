@@ -35,12 +35,41 @@ For hashing there are two algorithms the application can use:
 * SHA256
 * MD5
 
-Because the application uses polymorphism and MVVM architecture it would be easy to further expand the collection of supported algorithms by implementing correct interfaces.
+Because the application uses **polymorphism** and **MVVM** architecture it would be easy to further expand the collection of supported algorithms by implementing correct interfaces.
 
-### Domain
+### Usage
 ---
-This application's domain includes other users, encrypted and decrypted files, private keys and public certificates among other entities. Application is used locally, the
-certificate and file sharing is not implemented and is not this app's concern. 
+To use the application user first needs to register. To do that, he needs to provide the system with an **Username**, **Password** and his **X.509 Public Certificate** file.
+After that he can login to the system. Same registering form is used for adding external users, those users that you want to send encrypted files to. In that case the user needs to check
+the **External** checkbox and then he can register an external user by providing only **Username** you wish to identify him with and his **Public Certificate**.
+
+At login, user needs to provide his **Username**, **Password** and his **Private Key** that matches the Public Key included in his Public Certificate he used to register. The application will
+check if the private key matches the public key, and it will only login if they match.
+
+In the main form, user can set all the desired parameters: **input file**, **output file**, **algorithms** to use, **mode** and **sender**/**receiver**. If mode of operation is decryption, system will deduce the algorithms
+used from the header of the encrypted file.
+
+During encryption or encryption user will be presented with a progress bar and a text area where application will log it's progress.
+
+#### Testing
+
+For testing purposes there is a folder **'OPENSSL'** and a database **Users.db** provided in the repository with certificates and private keys. There are two users already registered:
+1. *Username*: default; *Password*: default; *Key*: OPENSSL/private/default.key
+2. *Username*: luka; *Password*: luka; *Key*: OPENSSL/private/luka.key
+
+If for some reason you want to create a new SQLite database here is the proper query:
+~~~~
+CREATE TABLE Users (
+    Id                INTEGER   PRIMARY KEY AUTOINCREMENT
+                                UNIQUE,
+    Username          CHAR (20) NOT NULL
+                                UNIQUE,
+    Salt              BLOB,
+    PassHash          BLOB,
+    IsExternal        INT       NOT NULL,
+    PublicCertificate BLOB      NOT NULL
+);
+~~~~
 
 ### Implementation
 ---
@@ -48,6 +77,8 @@ Project **AlgorithmLibrary** contains implementation for encryption algorithms l
 implement the **IMachine** interface so the application stays easily extensible with new algorithms by using **polymorphism**. This project should contain hash algorithms that implement 
 the abstract class **System.Security.Cryptography.HashAlgorithm**. Hashing algorithms I used were already implemented in .NET.
 
-**CryptedStreamParsers** project contains all neccessary classes for encrypting and decrypting
+**CryptedStreamParsers** project contains all neccessary classes for encrypting and decrypting streams. Every class here works with streams, so encrypted data doesn't neccessarilly needs to be
+a file, it can be a memory stream or something else. **PrivateKeyParsers** project contains neccessary classes for reading private key files.
 
-To use the application user first needs to register. To do that, he needs to provide the system with an **Username**, **Password** and his **X.509 Public Certificate** file.
+Project **FileEncryptorWpf** contains the **WPF** project.
+
