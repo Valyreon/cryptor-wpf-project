@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace FileEncryptorWpf.ViewModels.CustomValidationAttributes
 {
+    /// <summary>
+    /// Custom ValidationAttribute class that is used for determining if string contains a path to existing directory.
+    /// </summary>
     public class DirectoryExists : ValidationAttribute
     {
         private readonly bool invert = false;

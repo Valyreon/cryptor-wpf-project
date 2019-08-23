@@ -3,6 +3,9 @@ using System.Windows.Input;
 
 namespace FileEncryptorWpf.ViewModels
 {
+    /// <summary>
+    /// Class used for delegating commands to View in MVVM architecture without arguments.
+    /// </summary>
     public class DelegateCommand : ICommand
     {
         private readonly Action action;

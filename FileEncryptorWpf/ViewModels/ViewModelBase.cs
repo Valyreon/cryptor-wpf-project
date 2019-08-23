@@ -8,7 +8,10 @@ using System.Runtime.CompilerServices;
 
 namespace FileEncryptorWpf.ViewModels
 {
-    public class ViewModelBase : INotifyDataErrorInfo, INotifyPropertyChanged
+    /// <summary>
+    /// Defines the abstract class that every ViewModel in MVVM architecture must implement.
+    /// </summary>
+    public abstract class ViewModelBase : INotifyDataErrorInfo, INotifyPropertyChanged
     {
         private readonly Dictionary<string, List<string>> errors = new Dictionary<string, List<string>>();
 

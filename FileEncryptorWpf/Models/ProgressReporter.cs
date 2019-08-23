@@ -2,6 +2,9 @@
 
 namespace FileEncryptorWpf.Models
 {
+    /// <summary>
+    /// An MVVM model class that is used for wrapping two actions for reporting some operations progress, via text and percentage.
+    /// </summary>
     public class ProgressReporter
     {
         public ProgressReporter(Action<string> log, Action<int> percentage)

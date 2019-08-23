@@ -5,6 +5,9 @@ using UserDatabaseManager;
 
 namespace FileEncryptorWpf.Models
 {
+    /// <summary>
+    /// An MVVM model class used for registering new users.
+    /// </summary>
     public class RegisterManager
     {
         private readonly UserDatabase data;

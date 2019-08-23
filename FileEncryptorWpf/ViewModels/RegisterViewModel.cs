@@ -9,6 +9,9 @@ using UserDatabaseManager;
 
 namespace FileEncryptorWpf.ViewModels
 {
+    /// <summary>
+    /// Defines the <see cref="RegisterViewModel" /> class.
+    /// </summary>
     public class RegisterViewModel : ViewModelBase
     {
         private readonly IView thisWindow;

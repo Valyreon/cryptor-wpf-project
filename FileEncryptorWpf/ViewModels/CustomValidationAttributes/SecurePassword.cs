@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace FileEncryptorWpf.ViewModels.CustomValidationAttributes
 {
+    /// <summary>
+    /// Custom ValidationAttribute class that is used for determining if string can be used as a secure password.
+    /// </summary>
     public class SecurePassword : ValidationAttribute
     {
         public SecurePassword()

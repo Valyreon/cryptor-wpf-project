@@ -8,6 +8,9 @@ using UserDatabaseManager;
 
 namespace FileEncryptorWpf.Models
 {
+    /// <summary>
+    /// An MVVM model class that is used for encryption of files.
+    /// </summary>
     public class Encryptor
     {
         private readonly User receiver;
