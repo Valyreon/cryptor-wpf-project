@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using FileEncryptorWpf.Models;
@@ -121,7 +122,7 @@ namespace FileEncryptorWpf.ViewModels
             this.thisWindow.ChangeCurrentControlTo(this.backControl);
         }
 
-        private void TryToRegister()
+        private async void TryToRegister()
         {
             try
             {
@@ -138,7 +139,7 @@ namespace FileEncryptorWpf.ViewModels
                 if (!this.HasErrors)
                 {
                     RegisterManager registerManager = new RegisterManager(this.data);
-                    registerManager.Register(this.Username, this.CertificateFilePath, this.Password, this.IsExternal);
+                    await Task.Run(() => registerManager.Register(this.Username, this.CertificateFilePath, this.Password, this.IsExternal));
                     this.thisWindow.ChangeCurrentControlTo(this.backControl);
                 }
             }
