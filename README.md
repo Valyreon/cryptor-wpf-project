@@ -75,10 +75,16 @@ CREATE TABLE Users (
 ---
 Project **AlgorithmLibrary** contains implementation for encryption algorithms like **AES**, **Twofish** and **TripleDES**. Every algorithm 'machine' should
 implement the **IMachine** interface so the application stays easily extensible with new algorithms by using **polymorphism**. This project should contain hash algorithms that implement 
-the abstract class **System.Security.Cryptography.HashAlgorithm**. Hashing algorithms I used were already implemented in .NET.
+the abstract class System.Security.Cryptography.**HashAlgorithm**. Hashing algorithms I used were already implemented in .NET.
 
 **CryptedStreamParsers** project contains all neccessary classes for encrypting and decrypting streams. Every class here works with streams, so encrypted data doesn't neccessarilly needs to be
 a file, it can be a memory stream or something else. **PrivateKeyParsers** project contains neccessary classes for reading private key files.
 
 Project **FileEncryptorWpf** contains the **WPF** project.
 
+### Screenshots
+---
+
+<img src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/cryptor-main-form.PNG?raw=true"><img>
+<img src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/cryptor-login.PNG?raw=true"><img>
+<img src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/cryptor-output.PNG?raw=true"><img>
