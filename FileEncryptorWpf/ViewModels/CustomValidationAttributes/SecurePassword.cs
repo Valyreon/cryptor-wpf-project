@@ -12,7 +12,7 @@ namespace FileEncryptorWpf.ViewModels.CustomValidationAttributes
     {
         public SecurePassword()
         {
-            ErrorMessage = "Password must be between 8 and 19 characters long and contain at least 1 digit.";
+            this.ErrorMessage = "Password must be between 8 and 19 characters long and contain at least 1 digit.";
         }
 
         public override bool IsValid(object value)
@@ -20,10 +20,11 @@ namespace FileEncryptorWpf.ViewModels.CustomValidationAttributes
             string strValue = value as string;
 
             if (value is null)
+            {
                 return true;
+            }
 
-            return strValue.Length>7 && strValue.Length<20 && strValue.Any( c => char.IsDigit(c));
+            return strValue.Length > 7 && strValue.Length < 20 && strValue.Any(c => char.IsDigit(c));
         }
     }
 }
-

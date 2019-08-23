@@ -1,11 +1,10 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using System;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto.Parameters;
-
-using System;
 
 namespace AlgorithmLibrary
 {

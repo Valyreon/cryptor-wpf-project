@@ -22,7 +22,7 @@ namespace FileEncryptorWpf.Views
     {
         public RegisterControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

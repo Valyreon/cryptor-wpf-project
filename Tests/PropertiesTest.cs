@@ -1,8 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+﻿using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PropertiesStreams;
-
-using System.IO;
 
 namespace Tests
 {

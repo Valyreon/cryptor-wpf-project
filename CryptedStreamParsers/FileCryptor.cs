@@ -1,11 +1,9 @@
-﻿using AlgorithmLibrary;
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using AlgorithmLibrary;
 
 namespace CryptedStreamParsers.Cryptors
 {
@@ -35,14 +33,13 @@ namespace CryptedStreamParsers.Cryptors
         /// <param name="input"><see cref="OriginalFile"/> to be encrypted.</param>
         /// <param name="output">Output <see cref="Stream"/> where the encrypted file will be written.</param>
         /// <param name="algs">Combination of an encryption and a hash algorithm.</param>
+        /// <param name="reportProgress">Action used to report progress somewhere.</param>
         public void Encrypt(OriginalFile input, Stream output, CryptCombo algs, Action<int> reportProgress = null)
         {
             BinaryWriter writer = new BinaryWriter(output); // to write to output
             BinaryReader reader = new BinaryReader(input.FileContent);
             writer.Seek(0, SeekOrigin.Begin); // write to beginning, this will override if there is something there
             reader.BaseStream.Position = 0; // read from beginning
-
-            //List<byte[]> hashList = new List<byte[]>();
 
             long numberOfBlocks = input.FileContent.Length / algs.Machine.BlockSize;
             if (numberOfBlocks * algs.Machine.BlockSize < input.FileContent.Length)
@@ -75,6 +72,7 @@ namespace CryptedStreamParsers.Cryptors
                 contentHashAggregate = algs.Hasher.ComputeHash(contentHashAggregate.Concat(algs.Hasher.ComputeHash(additionalData)).ToArray());
                 writer.Write(additionalData);
             }
+
             reportProgress?.Invoke(30);
             for (int i = 0; i < numberOfBlocks; i++)
             {

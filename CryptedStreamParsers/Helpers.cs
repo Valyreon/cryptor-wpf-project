@@ -1,6 +1,5 @@
-﻿using CryptedStreamParsers.Exceptions;
-
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
+using CryptedStreamParsers.Exceptions;
 
 namespace CryptedStreamParsers
 {

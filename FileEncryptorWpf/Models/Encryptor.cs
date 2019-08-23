@@ -1,9 +1,9 @@
-﻿using AlgorithmLibrary;
-using CryptedStreamParsers;
-using CryptedStreamParsers.Cryptors;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using AlgorithmLibrary;
+using CryptedStreamParsers;
+using CryptedStreamParsers.Cryptors;
 using UserDatabaseManager;
 
 namespace FileEncryptorWpf.Models
@@ -23,7 +23,7 @@ namespace FileEncryptorWpf.Models
 
         public void EncryptFile(OriginalFile input, FileStream output, ProgressReporter reporter = null)
         {
-            var cert = new X509Certificate2(receiver.PublicCertificate);
+            var cert = new X509Certificate2(this.receiver.PublicCertificate);
 
             if (cert == null)
             {
@@ -42,7 +42,7 @@ namespace FileEncryptorWpf.Models
                     reporter?.Log("Receiver's certificate is valid.");
                     reporter?.Log("Encrypting file...");
                     FileCryptor cryptor = new FileCryptor(this.currentUser.PrivateKey, ((RSACryptoServiceProvider)cert.PublicKey.Key).ExportParameters(false));
-                    cryptor.Encrypt(input, output, combo, reporter.SetPercentage);
+                    cryptor.Encrypt(input, output, this.combo, reporter.SetPercentage);
                     reporter?.Log("File encryption complete.");
                 }
             }

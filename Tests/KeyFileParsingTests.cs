@@ -1,9 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using PrivateKeyParsers;
-
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PrivateKeyParsers;
 
 namespace Tests
 {
@@ -31,10 +29,12 @@ QJBGM7NRYI0CIAXTmPRYI+5gdhmUeMBTt5SfKz4WsO2bjjry8xh5eJ6hAiEAmqtK
             KeyFileParser parser = new KeyFileParser(Encoding.ASCII.GetBytes(privateKey));
             var parameters = parser.GetParameters();
 
-            RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
-            provider.ImportParameters(parameters);
+            using (RSACryptoServiceProvider provider = new RSACryptoServiceProvider())
+            {
+                provider.ImportParameters(parameters);
 
-            Assert.AreEqual(expectedResult, provider.ToXmlString(true));
+                Assert.AreEqual(expectedResult, provider.ToXmlString(true));
+            }
         }
 
         [TestMethod]

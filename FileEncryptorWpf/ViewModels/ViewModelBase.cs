@@ -1,5 +1,4 @@
-﻿using FileEncryptorWpf.Properties;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,26 +10,30 @@ namespace FileEncryptorWpf.ViewModels
 {
     public class ViewModelBase : INotifyDataErrorInfo, INotifyPropertyChanged
     {
-        private readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
+        private readonly Dictionary<string, List<string>> errors = new Dictionary<string, List<string>>();
+
+        private readonly object lockObject = new object();
+
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-        private readonly object _lock = new object();
-        public bool HasErrors { get { return _errors.Any(propErrors => propErrors.Value != null && propErrors.Value.Count > 0); } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void RaisePropertyChangedEvent(string propertyName)
+        public bool HasErrors
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get
+            {
+                return this.errors.Any(propErrors => propErrors.Value != null && propErrors.Value.Count > 0);
+            }
         }
 
         public void OnErrorsChanged(string propertyName)
         {
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            this.ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
         public void ValidateProperty(object value, [CallerMemberName] string propertyName = null)
         {
-            lock (_lock)
+            lock (this.lockObject)
             {
                 var validationContext = new ValidationContext(this, null, null)
                 {
@@ -40,27 +43,59 @@ namespace FileEncryptorWpf.ViewModels
                 Validator.TryValidateProperty(value, validationContext, validationResults);
 
                 //clear previous _errors from tested property  
-                if (_errors.ContainsKey(propertyName))
-                    _errors.Remove(propertyName);
-                OnErrorsChanged(propertyName);
-                HandleValidationResults(validationResults);
+                if (this.errors.ContainsKey(propertyName))
+                {
+                    this.errors.Remove(propertyName);
+                }
+
+                this.OnErrorsChanged(propertyName);
+                this.HandleValidationResults(validationResults);
             }
         }
 
         public void Validate()
         {
-            lock (_lock)
+            lock (this.lockObject)
             {
                 var validationContext = new ValidationContext(this, null, null);
                 var validationResults = new List<ValidationResult>();
                 Validator.TryValidateObject(this, validationContext, validationResults, true);
 
                 //clear all previous _errors  
-                var propNames = _errors.Keys.ToList();
-                _errors.Clear();
-                propNames.ForEach(pn => OnErrorsChanged(pn));
-                HandleValidationResults(validationResults);
+                var propNames = this.errors.Keys.ToList();
+                this.errors.Clear();
+                propNames.ForEach(pn => this.OnErrorsChanged(pn));
+                this.HandleValidationResults(validationResults);
             }
+        }
+
+        public IEnumerable GetErrors(string propertyName = null)
+        {
+            if (!string.IsNullOrEmpty(propertyName))
+            {
+                if (this.errors.ContainsKey(propertyName) && (this.errors[propertyName] != null) && this.errors[propertyName].Count > 0)
+                {
+                    return this.errors[propertyName].ToList();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return this.errors.SelectMany(err => err.Value.ToList());
+            }
+        }
+
+        public void ClearErrors()
+        {
+            this.errors.Clear();
+        }
+
+        protected void RaisePropertyChangedEvent(string propertyName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void HandleValidationResults(List<ValidationResult> validationResults)
@@ -72,27 +107,9 @@ namespace FileEncryptorWpf.ViewModels
             foreach (var prop in resultsByPropNames)
             {
                 var messages = prop.Select(r => r.ErrorMessage).ToList();
-                _errors.Add(prop.Key, messages);
-                OnErrorsChanged(prop.Key);
+                this.errors.Add(prop.Key, messages);
+                this.OnErrorsChanged(prop.Key);
             }
-        }
-
-        public IEnumerable GetErrors(string propertyName = null)
-        {
-            if (!string.IsNullOrEmpty(propertyName))
-            {
-                if (_errors.ContainsKey(propertyName) && (_errors[propertyName] != null) && _errors[propertyName].Count > 0)
-                    return _errors[propertyName].ToList();
-                else
-                    return null;
-            }
-            else
-                return _errors.SelectMany(err => err.Value.ToList());
-        }
-
-        public void ClearErrors()
-        {
-            _errors.Clear();
         }
     }
 }

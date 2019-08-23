@@ -4,29 +4,24 @@ namespace FileEncryptorWpf.Models
 {
     public class ProgressReporter
     {
-        private Action<string> logIt { get; set; }
-        private Action<int> percentageDone { get; set; }
-
         public ProgressReporter(Action<string> log, Action<int> percentage)
         {
-            this.logIt = log;
-            this.percentageDone = percentage;
+            this.LogIt = log;
+            this.PercentageDone = percentage;
         }
+
+        private Action<string> LogIt { get; set; }
+
+        private Action<int> PercentageDone { get; set; }
 
         public void Log(string line)
         {
-            if(logIt != null)
-            {
-                this.logIt(line);
-            }
+            this.LogIt?.Invoke(line);
         }
 
         public void SetPercentage(int i)
         {
-            if (percentageDone != null)
-            {
-                this.percentageDone(i);
-            }
+            this.PercentageDone?.Invoke(i);
         }
     }
 }

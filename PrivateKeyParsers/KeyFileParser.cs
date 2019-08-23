@@ -40,7 +40,7 @@ namespace PrivateKeyParsers
                     this.rawParameters =
                         Convert.FromBase64String(
                             Encoding.ASCII.GetString(
-                                trimmedBytes.Skip(PrivateHeaderStart.Length).Take(trimmedBytes.Length - PrivateHeaderStart.Length - PrivateHeaderEnd.Length-1).ToArray()));
+                                trimmedBytes.Skip(PrivateHeaderStart.Length).Take(trimmedBytes.Length - PrivateHeaderStart.Length - PrivateHeaderEnd.Length - 1).ToArray()));
                     this.isAlt = false;
                 }
                 else if (trimmedBytes.Take(PrivateHeaderStartAlt.Length).SequenceEqual(Encoding.ASCII.GetBytes(PrivateHeaderStartAlt)) &&

@@ -1,13 +1,10 @@
-﻿using AlgorithmLibrary;
-
-using CryptedStreamParsers.Exceptions;
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using AlgorithmLibrary;
+using CryptedStreamParsers.Exceptions;
 
 namespace CryptedStreamParsers
 {
@@ -103,7 +100,6 @@ namespace CryptedStreamParsers
             byte[] rsaSignature = reader.ReadBytes(rsaLength);
 
             return new RsaMachine(key).CheckSignature(contentHashAggregate, hasher, rsaSignature);
-
         }
     }
 }

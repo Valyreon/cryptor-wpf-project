@@ -1,8 +1,7 @@
-﻿using AlgorithmLibrary;
-
-using System;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using AlgorithmLibrary;
 
 namespace CryptedStreamParsers
 {
@@ -27,6 +26,7 @@ namespace CryptedStreamParsers
         /// </summary>
         /// <param name="input"><see cref="EncryptedFile"/> that will be decrypted.</param>
         /// <param name="output">Output <see cref="Stream"/> where the decrypted file will be written.</param>
+        /// <param name="reportProgress">Action that is used to report progress of decryption in percentages.</param>
         public void Decrypt(EncryptedFile input, Stream output, Action<int> reportProgress = null)
         {
             BinaryReader reader = new BinaryReader(input.BaseStream);
@@ -58,6 +58,7 @@ namespace CryptedStreamParsers
                 outputWriter.Write(decryptor.Decrypt(block));
                 reportProgress?.Invoke((int)(((float)i / (float)input.NumberOfBlocks) * 1000.00));
             }
+
             reportProgress?.Invoke(1000);
         }
     }

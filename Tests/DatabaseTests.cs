@@ -1,6 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UserDatabaseManager;
 
 namespace Tests
@@ -24,7 +23,7 @@ namespace Tests
         {
             UserDatabase db = new UserDatabase(@"F:\Documents\Visual Studio 2019\Projects\cryptor-wpf-project\Users.db");
             var st = Stopwatch.StartNew();
-            User def = db.GetUser("default");
+            db.GetUser("default");
             st.Stop();
         }
     }

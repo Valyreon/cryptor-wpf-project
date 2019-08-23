@@ -16,7 +16,6 @@ namespace FileEncryptorWpf.Models
         /// Initializes a new instance of the <see cref="UserInformation"/> class.
         /// </summary>
         /// <param name="user"><see cref="User"/> instance that contains information from the database.</param>
-        /// <param name="certificate">Certificate corresponding to <paramref name="user"/>.</param>
         /// <param name="privateKey"><see cref="RSAParameters"/> that contain private key of the <paramref name="user"/>.</param>
         public UserInformation(User user, RSAParameters privateKey)
         {

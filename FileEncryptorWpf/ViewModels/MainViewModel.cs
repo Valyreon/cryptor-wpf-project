@@ -30,6 +30,8 @@ namespace FileEncryptorWpf.ViewModels
         private readonly List<string> operationModes = new List<string>();
         private readonly List<HashAlgorithmChoice> hashAlgorithms = new List<HashAlgorithmChoice>();
         private readonly List<EncryptionAlgorithmChoice> encryptionAlgorithms = new List<EncryptionAlgorithmChoice>();
+        private readonly UserInformation currentUserInfo;
+        private readonly List<User> allUsers = new List<User>();
         private HashAlgorithmChoice chosenHashAlgorithm;
         private EncryptionAlgorithmChoice chosenEncryptionAlgorithm;
         private string usernameLabel;
@@ -38,9 +40,6 @@ namespace FileEncryptorWpf.ViewModels
         private string inputFilePath;
         private string outputFilePath;
         private bool isEncrypt;
-        private readonly UserDatabase dataSource;
-        private readonly UserInformation currentUserInfo;
-        private readonly List<User> allUsers = new List<User>();
         private User selectedUser;
 
         /// <summary>
@@ -51,9 +50,7 @@ namespace FileEncryptorWpf.ViewModels
         /// <param name="thisWindow">Window in which MainControl is shown.</param>
         public MainViewModel(UserInformation currentUser, UserDatabase data, IView thisWindow)
         {
-            this.dataSource = data;
             this.currentUserInfo = currentUser;
-
             this.thisWindow = thisWindow;
 
             this.operationModes.Add("Encrypt");
@@ -70,7 +67,6 @@ namespace FileEncryptorWpf.ViewModels
             this.ChosenEncryptionAlgorithm = this.encryptionAlgorithms[0];
 
             this.allUsers.AddRange(data.GetAllUsers().Where((user) => user.Username != currentUser.Username));
-            //selectedUser = allUsers[0];
         }
 
         public IList<string> OperationModes
@@ -246,7 +242,9 @@ namespace FileEncryptorWpf.ViewModels
         {
             this.Validate();
             if (this.HasErrors)
+            {
                 return;
+            }
 
             OutputViewModel outputViewModel = new OutputViewModel(this.thisWindow, this);
             this.thisWindow.ChangeCurrentControlTo(outputViewModel);
@@ -266,7 +264,7 @@ namespace FileEncryptorWpf.ViewModels
                             using (FileStream output = new FileStream(this.OutputFilePath, FileMode.Create))
                             {
                                 OriginalFile origin = new OriginalFile(input, Path.GetExtension(input.Name));
-                                Encryptor encryptor = new Encryptor(selectedUser, currentUserInfo, new CryptCombo(chosenHashAlgorithm.HashMachine, chosenEncryptionAlgorithm.CryptMachine));
+                                Encryptor encryptor = new Encryptor(this.SelectedUser, this.currentUserInfo, new CryptCombo(this.ChosenHashAlgorithm.HashMachine, this.ChosenEncryptionAlgorithm.CryptMachine));
                                 encryptor.EncryptFile(origin, output, reporter);
                             }
                         }
@@ -275,7 +273,7 @@ namespace FileEncryptorWpf.ViewModels
                             var cryptedFile = EncryptedFileChecker.Parse(input);
                             using (var output = new FileStream(this.OutputFilePath + cryptedFile.FormatExtension, FileMode.Create))
                             {
-                                Decryptor decryptor = new Decryptor(selectedUser, currentUserInfo);
+                                Decryptor decryptor = new Decryptor(this.SelectedUser, this.currentUserInfo);
                                 decryptor.DecryptFile(cryptedFile, output, reporter);
                             }
                         }
@@ -317,7 +315,7 @@ namespace FileEncryptorWpf.ViewModels
             {
                 FileName = string.Empty,
                 AddExtension = true,
-                InitialDirectory = string.IsNullOrWhiteSpace(InputFilePath) ? "" : Path.GetDirectoryName(InputFilePath)
+                InitialDirectory = string.IsNullOrWhiteSpace(this.InputFilePath) ? string.Empty : Path.GetDirectoryName(this.InputFilePath)
             })
             {
                 var result = dlg.ShowDialog();
@@ -328,7 +326,7 @@ namespace FileEncryptorWpf.ViewModels
                 }
                 else
                 {
-                    this.ValidateProperty(OutputFilePath, "OutputFilePath");
+                    this.ValidateProperty(this.OutputFilePath, "OutputFilePath");
                 }
             }
         }
@@ -342,7 +340,6 @@ namespace FileEncryptorWpf.ViewModels
                 CheckPathExists = true
             })
             {
-
                 fileChooseDialog.ShowDialog();
                 try
                 {
@@ -355,7 +352,7 @@ namespace FileEncryptorWpf.ViewModels
                 }
                 catch (Exception)
                 {
-                    this.ValidateProperty(InputFilePath, "InputFilePath");
+                    this.ValidateProperty(this.InputFilePath, "InputFilePath");
                 }
             }
         }

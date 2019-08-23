@@ -1,14 +1,13 @@
-﻿using FileEncryptorWpf.Models;
-using FileEncryptorWpf.ViewModels.CustomValidationAttributes;
-using FileEncryptorWpf.Views;
-using PrivateKeyParsers;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using FileEncryptorWpf.Models;
+using FileEncryptorWpf.ViewModels.CustomValidationAttributes;
+using FileEncryptorWpf.Views;
+using PrivateKeyParsers;
 using UserDatabaseManager;
 
 namespace FileEncryptorWpf.ViewModels
@@ -27,7 +26,7 @@ namespace FileEncryptorWpf.ViewModels
         private string username;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoginViewModel"/>.
+        /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
         /// </summary>
         /// <param name="thisWindow">Window in which LoginControl is shown.</param>
         public LoginViewModel(IView thisWindow)
@@ -97,8 +96,6 @@ namespace FileEncryptorWpf.ViewModels
             }
         }
 
-        public Dictionary<string, string> ValidationErrors = new Dictionary<string, string>();
-
         public ICommand ChoosePrivateKeyCommand { get => new DelegateCommand(this.ChoosePrivateKey); }
 
         public ICommand ChooseUserDatabaseCommand { get => new DelegateCommand(this.ChooseUserDatabase); }
@@ -119,7 +116,6 @@ namespace FileEncryptorWpf.ViewModels
                 FilterIndex = 3
             })
             {
-
                 var result = dlg.ShowDialog();
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.FileName))
@@ -138,7 +134,6 @@ namespace FileEncryptorWpf.ViewModels
                 CheckFileExists = true
             })
             {
-
                 var result = dlg.ShowDialog();
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.FileName))
@@ -150,15 +145,16 @@ namespace FileEncryptorWpf.ViewModels
 
         private void SaveSettings()
         {
-            ClearErrors();
-            ValidateProperty(this.UserDatabasePath, "UserDatabasePath");
+            this.ClearErrors();
+            this.ValidateProperty(this.UserDatabasePath, "UserDatabasePath");
 
             if (this.HasErrors)
+            {
                 return;
+            }
 
             try
             {
-
                 using (FileStream propertyFile = new FileStream("settings.cfg", FileMode.Create))
                 {
                     PropertiesStreams.Properties props = new PropertiesStreams.Properties();
@@ -179,9 +175,9 @@ namespace FileEncryptorWpf.ViewModels
             try
             {
                 this.Validate();
-                if(!this.HasErrors)
+                if (!this.HasErrors)
                 {
-                    LoginManager loginManager = new LoginManager(privateKeyPath, userDatabasePath);
+                    LoginManager loginManager = new LoginManager(this.PrivateKeyFilePath, this.UserDatabasePath);
                     var userInfo = loginManager.Login(this.username, (passBox as PasswordBox).Password, out var data);
 
                     this.thisWindow.ChangeCurrentControlTo(new MainViewModel(userInfo, data, this.thisWindow));
@@ -199,7 +195,7 @@ namespace FileEncryptorWpf.ViewModels
 
         private void GoToRegister()
         {
-            UserDatabase data = new UserDatabase(UserDatabasePath);
+            UserDatabase data = new UserDatabase(this.UserDatabasePath);
             this.thisWindow.ChangeCurrentControlTo(new RegisterViewModel(this.thisWindow, this, data));
         }
     }

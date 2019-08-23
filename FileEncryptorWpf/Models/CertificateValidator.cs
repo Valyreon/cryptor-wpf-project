@@ -24,16 +24,6 @@ namespace FileEncryptorWpf.Models
 
                 if (!isChainValid)
                 {
-                    string[] errors = chain.ChainStatus
-                        .Select(x => String.Format("{0} ({1})", x.StatusInformation.Trim(), x.Status)) //TODO: Do you need this?
-                        .ToArray();
-                    string certificateErrorsString = "Unknown errors.";
-
-                    if (errors != null && errors.Length > 0)
-                    {
-                        certificateErrorsString = string.Join(", ", errors);
-                    }
-
                     return false;
                 }
 

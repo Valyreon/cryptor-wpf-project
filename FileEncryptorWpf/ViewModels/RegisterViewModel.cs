@@ -1,11 +1,10 @@
-﻿using FileEncryptorWpf.Models;
-using FileEncryptorWpf.ViewModels.CustomValidationAttributes;
-using FileEncryptorWpf.Views;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using FileEncryptorWpf.Models;
+using FileEncryptorWpf.ViewModels.CustomValidationAttributes;
+using FileEncryptorWpf.Views;
 using UserDatabaseManager;
 
 namespace FileEncryptorWpf.ViewModels
@@ -14,11 +13,11 @@ namespace FileEncryptorWpf.ViewModels
     {
         private readonly IView thisWindow;
         private readonly object backControl;
+        private readonly UserDatabase data;
         private string username;
         private string password;
         private string certificateFilePath;
         private bool isExternal;
-        private readonly UserDatabase data;
 
         public RegisterViewModel(IView thisWindow, object backControl, UserDatabase data)
         {
@@ -27,7 +26,7 @@ namespace FileEncryptorWpf.ViewModels
             this.data = data;
         }
 
-        public bool IsNotExternal { get => !isExternal; }
+        public bool IsNotExternal { get => !this.isExternal; }
 
         [Required]
         [StringLength(25, MinimumLength = 7, ErrorMessage = "Username must be between 7 and 25 characters long.")]
@@ -96,6 +95,8 @@ namespace FileEncryptorWpf.ViewModels
 
         public ICommand ChooseCertificateCommand { get => new DelegateCommandWithParameter(this.ChooseCertificate); }
 
+        public ICommand CancelCommand { get => new DelegateCommand(this.Cancel); }
+
         private void ChooseCertificate(object obj)
         {
             using (OpenFileDialog dlg = new OpenFileDialog
@@ -107,16 +108,14 @@ namespace FileEncryptorWpf.ViewModels
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.FileName))
                 {
-                    CertificateFilePath = dlg.FileName;
+                    this.CertificateFilePath = dlg.FileName;
                 }
             }
         }
 
-        public ICommand CancelCommand { get => new DelegateCommand(this.Cancel); }
-
         private void Cancel()
         {
-            this.thisWindow.ChangeCurrentControlTo(backControl);
+            this.thisWindow.ChangeCurrentControlTo(this.backControl);
         }
 
         private void TryToRegister()
@@ -124,19 +123,20 @@ namespace FileEncryptorWpf.ViewModels
             try
             {
                 this.ClearErrors();
-                if(this.IsNotExternal)
+                if (this.IsNotExternal)
                 {
-                    this.ValidateProperty(Password, "Password");
+                    this.ValidateProperty(this.Password, "Password");
                 }
-                OnErrorsChanged("Password");
-                this.ValidateProperty(Username, "Username");
-                this.ValidateProperty(CertificateFilePath, "CertificateFilePath");
+
+                this.OnErrorsChanged("Password");
+                this.ValidateProperty(this.Username, "Username");
+                this.ValidateProperty(this.CertificateFilePath, "CertificateFilePath");
 
                 if (!this.HasErrors)
                 {
-                    RegisterManager registerManager = new RegisterManager(data);
-                    registerManager.Register(username, certificateFilePath, Password, isExternal);
-                    this.thisWindow.ChangeCurrentControlTo(backControl);
+                    RegisterManager registerManager = new RegisterManager(this.data);
+                    registerManager.Register(this.Username, this.CertificateFilePath, this.Password, this.IsExternal);
+                    this.thisWindow.ChangeCurrentControlTo(this.backControl);
                 }
             }
             catch (Exception ex)

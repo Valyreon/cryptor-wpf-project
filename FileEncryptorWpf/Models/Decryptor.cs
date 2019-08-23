@@ -1,8 +1,7 @@
-﻿using AlgorithmLibrary;
-using CryptedStreamParsers;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using CryptedStreamParsers;
 using UserDatabaseManager;
 
 namespace FileEncryptorWpf.Models
@@ -20,7 +19,7 @@ namespace FileEncryptorWpf.Models
 
         public void DecryptFile(EncryptedFile input, FileStream output, ProgressReporter reporter = null)
         {
-            var cert = new X509Certificate2(sender.PublicCertificate);
+            var cert = new X509Certificate2(this.sender.PublicCertificate);
 
             if (cert == null)
             {
@@ -45,6 +44,7 @@ namespace FileEncryptorWpf.Models
                 {
                     reporter?.Log("File verification: FAILED");
                 }
+
                 reporter?.SetPercentage(25);
             }
 
@@ -52,8 +52,6 @@ namespace FileEncryptorWpf.Models
             FileDecryptor decryptor = new FileDecryptor(this.currentUser.PrivateKey);
             decryptor.Decrypt(input, output, reporter.SetPercentage);
             reporter?.Log("File decryption complete.");
-
-
         }
     }
 }

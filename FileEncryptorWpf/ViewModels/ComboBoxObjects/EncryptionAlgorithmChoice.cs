@@ -7,19 +7,19 @@ namespace FileEncryptorWpf.Models.ComboBoxObjects
     /// </summary>
     public class EncryptionAlgorithmChoice
     {
-        private static int _nextIndex = 0;
+        private static int nextIndex = 0;
+
+        public EncryptionAlgorithmChoice(string name, IMachine hashMachine)
+        {
+            this.Id = nextIndex++;
+            this.Name = name;
+            this.CryptMachine = hashMachine;
+        }
 
         public int Id { get; set; }
 
         public string Name { get; }
 
         public IMachine CryptMachine { get; }
-
-        public EncryptionAlgorithmChoice(string name, IMachine hashMachine)
-        {
-            Id = _nextIndex++;
-            Name = name;
-            CryptMachine = hashMachine;
-        }
     }
 }

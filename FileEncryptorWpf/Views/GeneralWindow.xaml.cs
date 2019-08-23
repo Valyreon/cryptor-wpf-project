@@ -1,6 +1,5 @@
-﻿using FileEncryptorWpf.ViewModels;
-
-using System.Windows;
+﻿using System.Windows;
+using FileEncryptorWpf.ViewModels;
 
 namespace FileEncryptorWpf.Views
 {

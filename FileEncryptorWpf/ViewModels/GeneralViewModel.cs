@@ -12,7 +12,7 @@ namespace FileEncryptorWpf.ViewModels
         private object currentControl;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GeneralViewModel"/>.
+        /// Initializes a new instance of the <see cref="GeneralViewModel"/> class.
         /// </summary>
         /// <param name="thisWindow">Window in which all the UserControls are to be shown in.</param>
         public GeneralViewModel(IView thisWindow)
