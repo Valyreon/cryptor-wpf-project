@@ -52,7 +52,7 @@ used from the header of the encrypted file.
 Application provides data validation so any textbox with an invalid entry will be marked with a red **X** on the right side and it's
 tooltip will contain an explanation.
 
-During encryption or encryption user will be presented with a progress bar and a text area where application will log it's progress.
+During encryption or decryption user will be presented with a progress bar and a text area where application will log it's progress during the operation.
 
 #### Testing
 
