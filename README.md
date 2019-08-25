@@ -1,8 +1,7 @@
 <img align="right" src="https://github.com/Valyreon/cryptor-wpf-project/blob/master/FileEncryptorWpf/cryptLogoSmaller.PNG?raw=true"><img>
 # Cryptor
 
-**Cryptor** is a program written in **C#** that can encrypt and decrypt files using hybrid data encryption. It has a 
-built in **PKI** and can encrypt files using several encryption and hashing algorithms.
+**Cryptor** is a program written in **C#** that can encrypt and decrypt files using hybrid data encryption. It has implemented **PKI** and can encrypt files using several encryption and hashing algorithms.
 
 Cryptor works by generating a random password or key for the encryption algorithm, encrypting the data block by block and then encrypting the encryption key using
 the receivers public key and writing it all in a file with **custom format**. That file is then digitally signed using the senders private key and the signature is appended to
