@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using FileEncryptorWpf.ViewModels;
 
 namespace FileEncryptorWpf.Views
@@ -6,22 +7,26 @@ namespace FileEncryptorWpf.Views
     /// <summary>
     /// Interaction logic for GeneralWindow.xaml
     /// </summary>
-    public partial class GeneralWindow : Window, IWindow
+    public partial class GeneralWindow : Window, IViewModelHistory
     {
+        private readonly Stack<object> viewModelHistory = new Stack<object>();
+
         public GeneralWindow()
         {
             this.InitializeComponent();
             this.DataContext = new GeneralViewModel(this);
         }
 
-        public void ChangeCurrentControlTo(object x)
+        public void GoToPreviousViewModel()
         {
-            ((GeneralViewModel)DataContext).CurrentControl = x;
+            viewModelHistory.Pop();
+            ((GeneralViewModel)DataContext).CurrentControl = viewModelHistory.Peek();
         }
 
-        public void SetHeight(int height)
+        public void GoToViewModel(object x)
         {
-            this.Height = height;
+            viewModelHistory.Push(x);
+            ((GeneralViewModel)DataContext).CurrentControl = x;
         }
     }
 }

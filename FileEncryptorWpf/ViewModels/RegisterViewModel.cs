@@ -15,18 +15,16 @@ namespace FileEncryptorWpf.ViewModels
     /// </summary>
     public class RegisterViewModel : ViewModelBase
     {
-        private readonly IWindow thisWindow;
-        private readonly object backControl;
+        private readonly IViewModelHistory thisWindow;
         private readonly UserDatabase data;
         private string username;
         private string password;
         private string certificateFilePath;
         private bool isExternal;
 
-        public RegisterViewModel(IWindow thisWindow, object backControl, UserDatabase data)
+        public RegisterViewModel(IViewModelHistory thisWindow, UserDatabase data)
         {
             this.thisWindow = thisWindow;
-            this.backControl = backControl;
             this.data = data;
         }
 
@@ -119,7 +117,7 @@ namespace FileEncryptorWpf.ViewModels
 
         private void Cancel()
         {
-            this.thisWindow.ChangeCurrentControlTo(this.backControl);
+            this.thisWindow.GoToPreviousViewModel();
         }
 
         private async void TryToRegister()
@@ -140,7 +138,7 @@ namespace FileEncryptorWpf.ViewModels
                 {
                     RegisterManager registerManager = new RegisterManager(this.data);
                     await Task.Run(() => registerManager.Register(this.Username, this.CertificateFilePath, this.Password, this.IsExternal));
-                    this.thisWindow.ChangeCurrentControlTo(this.backControl);
+                    this.thisWindow.GoToPreviousViewModel();
                 }
             }
             catch (Exception ex)

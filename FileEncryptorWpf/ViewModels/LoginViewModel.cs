@@ -18,7 +18,7 @@ namespace FileEncryptorWpf.ViewModels
     /// </summary>
     public class LoginViewModel : ViewModelBase
     {
-        private readonly IWindow thisWindow;
+        private readonly IViewModelHistory thisWindow;
 
         private string privateKeyPath;
 
@@ -32,7 +32,7 @@ namespace FileEncryptorWpf.ViewModels
         /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
         /// </summary>
         /// <param name="thisWindow">Window in which LoginControl is shown.</param>
-        public LoginViewModel(IWindow thisWindow)
+        public LoginViewModel(IViewModelHistory thisWindow)
         {
             this.thisWindow = thisWindow;
             this.Username = "default";
@@ -199,7 +199,7 @@ namespace FileEncryptorWpf.ViewModels
                     LoginManager loginManager = new LoginManager(this.PrivateKeyFilePath, this.UserDatabasePath);
                     var userInfo = await Task.Run(() => loginManager.Login(this.username, (passBox as PasswordBox).Password, out data));
 
-                    this.thisWindow.ChangeCurrentControlTo(new MainViewModel(userInfo, data, this.thisWindow));
+                    this.thisWindow.GoToViewModel(new MainViewModel(userInfo, data, this.thisWindow));
                 }
             }
             catch (InvalidKeyFileException)
@@ -218,7 +218,7 @@ namespace FileEncryptorWpf.ViewModels
         private void GoToRegister()
         {
             UserDatabase data = new UserDatabase(this.UserDatabasePath);
-            this.thisWindow.ChangeCurrentControlTo(new RegisterViewModel(this.thisWindow, this, data));
+            this.thisWindow.GoToViewModel(new RegisterViewModel(this.thisWindow, data));
         }
     }
 }

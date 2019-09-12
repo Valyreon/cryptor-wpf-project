@@ -108,7 +108,7 @@
     <Compile Include="Views\GeneralWindow.xaml.cs">
       <DependentUpon>GeneralWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\IView.cs" />
+    <Compile Include="Views\IViewModelHistory.cs" />
     <Compile Include="ViewModels\OutputViewModel.cs" />
     <Compile Include="Views\LoginControl.xaml.cs">
       <DependentUpon>LoginControl.xaml</DependentUpon>
