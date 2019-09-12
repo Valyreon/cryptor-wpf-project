@@ -6,7 +6,7 @@ namespace FileEncryptorWpf.Views
     /// <summary>
     /// Interaction logic for GeneralWindow.xaml
     /// </summary>
-    public partial class GeneralWindow : Window, IView
+    public partial class GeneralWindow : Window, IWindow
     {
         public GeneralWindow()
         {

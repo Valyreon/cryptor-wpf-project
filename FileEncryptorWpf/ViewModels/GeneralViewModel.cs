@@ -7,7 +7,7 @@ namespace FileEncryptorWpf.ViewModels
     /// </summary>
     public class GeneralViewModel : ViewModelBase
     {
-        private readonly IView thisWindow;
+        private readonly IWindow thisWindow;
 
         private object currentControl;
 
@@ -15,7 +15,7 @@ namespace FileEncryptorWpf.ViewModels
         /// Initializes a new instance of the <see cref="GeneralViewModel"/> class.
         /// </summary>
         /// <param name="thisWindow">Window in which all the UserControls are to be shown in.</param>
-        public GeneralViewModel(IView thisWindow)
+        public GeneralViewModel(IWindow thisWindow)
         {
             this.thisWindow = thisWindow;
             this.CurrentControl = new LoginViewModel(this.thisWindow);
