@@ -18,7 +18,7 @@ namespace FileEncryptorWpf.ViewModels
     /// </summary>
     public class LoginViewModel : ViewModelBase
     {
-        private readonly IViewModelHistory thisWindow;
+        private readonly ViewModelHistory thisWindow;
 
         private string privateKeyPath;
 
@@ -32,7 +32,7 @@ namespace FileEncryptorWpf.ViewModels
         /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
         /// </summary>
         /// <param name="thisWindow">Window in which LoginControl is shown.</param>
-        public LoginViewModel(IViewModelHistory thisWindow)
+        public LoginViewModel(ViewModelHistory thisWindow)
         {
             this.thisWindow = thisWindow;
             this.Username = "default";

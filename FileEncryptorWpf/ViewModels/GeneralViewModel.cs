@@ -1,24 +1,22 @@
 ﻿using FileEncryptorWpf.Views;
+using System.ComponentModel;
 
 namespace FileEncryptorWpf.ViewModels
 {
     /// <summary>
     /// Defines the <see cref="GeneralViewModel" /> class.
     /// </summary>
-    public class GeneralViewModel : ViewModelBase
+    public class GeneralViewModel : ViewModelHistory, INotifyPropertyChanged
     {
-        private readonly IViewModelHistory thisWindow;
-
         private object currentControl;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GeneralViewModel"/> class.
         /// </summary>
         /// <param name="thisWindow">Window in which all the UserControls are to be shown in.</param>
-        public GeneralViewModel(IViewModelHistory thisWindow)
+        public GeneralViewModel()
         {
-            this.thisWindow = thisWindow;
-            this.CurrentControl = new LoginViewModel(this.thisWindow);
+            this.CurrentControl = new LoginViewModel(this);
         }
 
         public object CurrentControl
@@ -33,6 +31,18 @@ namespace FileEncryptorWpf.ViewModels
                 this.currentControl = value;
                 this.RaisePropertyChangedEvent("CurrentControl");
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChangedEvent(string propertyName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected override void SetCurrentControl(object obj)
+        {
+            this.CurrentControl = obj;
         }
     }
 }

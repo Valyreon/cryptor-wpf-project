@@ -15,14 +15,14 @@ namespace FileEncryptorWpf.ViewModels
     /// </summary>
     public class RegisterViewModel : ViewModelBase
     {
-        private readonly IViewModelHistory thisWindow;
+        private readonly ViewModelHistory thisWindow;
         private readonly UserDatabase data;
         private string username;
         private string password;
         private string certificateFilePath;
         private bool isExternal;
 
-        public RegisterViewModel(IViewModelHistory thisWindow, UserDatabase data)
+        public RegisterViewModel(ViewModelHistory thisWindow, UserDatabase data)
         {
             this.thisWindow = thisWindow;
             this.data = data;

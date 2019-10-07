@@ -23,7 +23,7 @@ namespace FileEncryptorWpf.ViewModels
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        private readonly IViewModelHistory thisWindow;
+        private readonly ViewModelHistory thisWindow;
         private readonly List<string> operationModes = new List<string>();
         private readonly List<HashAlgorithmChoice> hashAlgorithms = new List<HashAlgorithmChoice>();
         private readonly List<EncryptionAlgorithmChoice> encryptionAlgorithms = new List<EncryptionAlgorithmChoice>();
@@ -45,7 +45,7 @@ namespace FileEncryptorWpf.ViewModels
         /// <param name="currentUser">All the required information about the current logged in user.</param>
         /// <param name="data">Instance of <see cref="DataComponents"/> that allows access to user database and certificates.</param>
         /// <param name="thisWindow">Window in which MainControl is shown.</param>
-        public MainViewModel(UserInformation currentUser, UserDatabase data, IViewModelHistory thisWindow)
+        public MainViewModel(UserInformation currentUser, UserDatabase data, ViewModelHistory thisWindow)
         {
             this.currentUserInfo = currentUser;
             this.thisWindow = thisWindow;

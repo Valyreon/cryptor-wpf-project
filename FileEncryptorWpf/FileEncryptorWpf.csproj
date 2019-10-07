@@ -105,10 +105,10 @@
     <Compile Include="ViewModels\GeneralViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\ViewModelHistory.cs" />
     <Compile Include="Views\GeneralWindow.xaml.cs">
       <DependentUpon>GeneralWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\IViewModelHistory.cs" />
     <Compile Include="ViewModels\OutputViewModel.cs" />
     <Compile Include="Views\LoginControl.xaml.cs">
       <DependentUpon>LoginControl.xaml</DependentUpon>

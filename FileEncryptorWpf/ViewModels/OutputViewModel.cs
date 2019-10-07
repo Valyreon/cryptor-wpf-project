@@ -8,7 +8,7 @@ namespace FileEncryptorWpf.ViewModels
     /// </summary>
     public class OutputViewModel : ViewModelBase
     {
-        private readonly IViewModelHistory thisWindow;
+        private readonly ViewModelHistory thisWindow;
         private string outputText;
         private bool isBackEnabled;
         private int currentOperationProgress;
@@ -18,7 +18,7 @@ namespace FileEncryptorWpf.ViewModels
         /// </summary>
         /// <param name="thisWindow">Window in which LoginControl is shown.</param>
         /// <param name="backViewModel">UserControl to return to after completion.</param>
-        public OutputViewModel(IViewModelHistory thisWindow)
+        public OutputViewModel(ViewModelHistory thisWindow)
         {
             this.thisWindow = thisWindow;
             this.IsBackEnabled = false;
