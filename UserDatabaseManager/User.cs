@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -23,13 +23,11 @@ namespace UserDatabaseManager
 
         public bool IsPasswordValid(string password)
         {
-            using (var hasher = SHA1.Create())
-            {
-                byte[] passBytes = Encoding.ASCII.GetBytes(password);
-                var currentHash = hasher.ComputeHash(UserDatabase.Pepper.Concat(this.Salt).Concat(passBytes).ToArray());
+            using var hasher = SHA1.Create();
+            var passBytes = Encoding.ASCII.GetBytes(password);
+            var currentHash = hasher.ComputeHash(UserDatabase.Pepper.Concat(Salt).Concat(passBytes).ToArray());
 
-                return currentHash.SequenceEqual(this.PassHash);
-            }
+            return currentHash.SequenceEqual(PassHash);
         }
     }
 }

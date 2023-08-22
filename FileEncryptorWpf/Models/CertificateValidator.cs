@@ -13,22 +13,20 @@ namespace FileEncryptorWpf.Models
     {
         public static bool VerifyCertificate(X509Certificate2 certificateToValidate)
         {
-            using (X509Chain chain = new X509Chain())
+            using X509Chain chain = new X509Chain();
+            chain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
+            chain.ChainPolicy.RevocationFlag = X509RevocationFlag.EndCertificateOnly;
+            chain.ChainPolicy.VerificationFlags = X509VerificationFlags.AllowUnknownCertificateAuthority;
+            chain.ChainPolicy.VerificationTime = DateTime.Now;
+
+            bool isChainValid = chain.Build(certificateToValidate);
+
+            if (!isChainValid)
             {
-                chain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
-                chain.ChainPolicy.RevocationFlag = X509RevocationFlag.EndCertificateOnly;
-                chain.ChainPolicy.VerificationFlags = X509VerificationFlags.AllowUnknownCertificateAuthority;
-                chain.ChainPolicy.VerificationTime = DateTime.Now;
-
-                bool isChainValid = chain.Build(certificateToValidate);
-
-                if (!isChainValid)
-                {
-                    return false;
-                }
-
-                return true;
+                return false;
             }
+
+            return true;
         }
 
         public static bool VerifyKeyUsage(X509Certificate2 cert)

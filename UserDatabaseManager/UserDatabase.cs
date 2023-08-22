@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -19,55 +19,53 @@ namespace UserDatabaseManager
         /// <param name="pathToDatabase">The path to the database file.<see cref="string"/></param>
         public UserDatabase(string pathToDatabase)
         {
-            this.context = new UsersContext(pathToDatabase);
+            context = new UsersContext(pathToDatabase);
         }
 
         public static byte[] Pepper { get; } = new byte[] { 43, 92, 24, 11 };
 
         public User GetUser(string username)
         {
-            return this.context.Users.Where(u => u.Username == username).SingleOrDefault();
+            return context.Users.Where(u => u.Username == username).SingleOrDefault();
         }
 
         public void AddUser(string username, string password, byte[] certificate)
         {
-            using (var hasher = SHA1.Create())
+            using var hasher = SHA1.Create();
+            var salt = new byte[16];
+            new Random().NextBytes(salt);
+            var passBytes = Encoding.ASCII.GetBytes(password);
+            var passHash = hasher.ComputeHash(Pepper.Concat(salt).Concat(passBytes).ToArray());
+
+            var toAdd = new User
             {
-                byte[] salt = new byte[16];
-                new Random().NextBytes(salt);
-                byte[] passBytes = Encoding.ASCII.GetBytes(password);
-                byte[] passHash = hasher.ComputeHash(Pepper.Concat(salt).Concat(passBytes).ToArray());
+                Username = username,
+                PublicCertificate = certificate,
+                Salt = salt,
+                PassHash = passHash,
+                IsExternal = false
+            };
 
-                User toAdd = new User
-                {
-                    Username = username,
-                    PublicCertificate = certificate,
-                    Salt = salt,
-                    PassHash = passHash,
-                    IsExternal = false
-                };
-
-                this.context.Users.Add(toAdd);
-                this.context.SaveChanges();
-            }
+            context.Users.Add(toAdd);
+            context.SaveChanges();
         }
 
         public void AddExternal(string username, byte[] certificate)
         {
-            User toAdd = new User
+            var toAdd = new User
             {
                 Username = username,
                 IsExternal = true,
                 PublicCertificate = certificate
             };
 
-            this.context.Users.Add(toAdd);
-            this.context.SaveChanges();
+            context.Users.Add(toAdd);
+            context.SaveChanges();
         }
 
         public IEnumerable<User> GetAllUsers()
         {
-            return this.context.Users.AsEnumerable();
+            return context.Users.AsEnumerable();
         }
     }
 }
